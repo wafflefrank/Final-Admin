@@ -34,6 +34,7 @@
     border
     stripe
     style="width: 100%"
+    :header-cell-class-name="memberTitleFunc"
   >
     <el-table-column label="會員訊息" class="membertitle">
       <el-table-column prop="account" label="會員帳號" />
@@ -65,6 +66,7 @@
   <!-- 分頁套件 -->
   <div class="titleStyle">
     <el-pagination
+      class="pageStyle"
       background
       @current-change="handleCurrentChange"
       @size-change="sizechange"
@@ -73,6 +75,7 @@
       :page-size="pagesize"
       layout="prev, pager, next, sizes"
       :total="total"
+      :small="small"
       style="margin: 10px 0px"
     ></el-pagination>
 
@@ -88,7 +91,10 @@
 
   <!-- ProductModal 新增會員-->
   <ProductModal ref="memberModal"></ProductModal>
+
   <!-- MemberDetailModal 會員資料-->
+  <!-- 1. memberData = props定義的名稱 -->
+  <!-- 2. tempProduct = 你這頁的tempProduct-->
   <MemberDetailModal
     ref="memberDetailModal"
     :memberData="tempProduct"
@@ -103,6 +109,7 @@ import MemberDetailModal from '../components/OpenModal/MemberDetial.vue';
 export default {
   data() {
     return {
+      small: true, // 分頁樣式大小
       total: 60, // 總共多少頁數
       currentPage: 1, // 當前頁數
       pagesize: 10, // 當前頁顯示多少條
@@ -140,6 +147,8 @@ export default {
         email: '',
         IM2: '',
         phone: '',
+        pic1: '',
+        pic2: '',
       },
 
       value: '',
@@ -238,6 +247,8 @@ export default {
       this.memberDataEdit.birthday = item.birthday;
       this.memberDataEdit.IM1 = item.IM1;
       this.memberDataEdit.IM2 = item.IM2;
+      this.memberDataEdit.pic1 = item.pic1;
+      this.memberDataEdit.pic2 = item.pic2;
       console.log(item.id, item.account);
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       const productComponent = this.$refs.memberDetailModal;
@@ -263,6 +274,16 @@ export default {
       if (!bellValue.includes('.')) bellValue += '.';
       return bellValue.replace(/(\d)(?=(\d{3})+\.)/g, ($0, $1) => `${$1},`).replace(/\.$/, '');
     },
+    // 客製欄位樣式
+    memberTitleFunc({
+      row, column, rowIndex, columnIndex,
+    }) {
+      console.log(row, column, rowIndex, columnIndex);
+      if ((columnIndex === 0 && rowIndex === 0) || (columnIndex === 1 && rowIndex === 0)) {
+        return 'member_title_dark';
+      }
+      return '';
+    },
   },
   created() {
     this.getUserinfo();
@@ -280,12 +301,23 @@ export default {
 .selectStyle {
   margin-right: 20px;
 }
-.el-table_1_column_1 .cell {
-  text-align: center;
-  color: rgb(212, 185, 28);
+.el-pager + button.btn-next[type='button'] {
+  margin-right: 20px;
 }
-.el-table_1_column_8 .cell {
-  text-align: center;
-  color: rgb(212, 185, 28);
+// .el-table_1_column_1 .cell {
+//   text-align: center;
+//   color: rgb(212, 185, 28);
+// }
+// .el-table_1_column_8 .cell {
+//   text-align: center;
+//   color: rgb(212, 185, 28);
+// }
+.member_title_dark {
+  color: rgb(212, 185, 28) !important;
+  text-align: center !important;
+}
+.member_title_light {
+  color: rgb(212, 185, 28) !important;
+  text-align: center !important;
 }
 </style>

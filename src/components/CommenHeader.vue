@@ -53,7 +53,7 @@ export default {
     },
     getBreadcrumb() {
       let { matched } = this.$route;
-      // 如果不是首页
+      // 如果不是首頁
       if (!this.isHome(matched[0])) {
         matched = [{ path: '/home', meta: { title: '首頁' } }].concat(matched);
       }

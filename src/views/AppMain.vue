@@ -36,3 +36,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.el-header {
+  padding: 0px;
+}
+</style>

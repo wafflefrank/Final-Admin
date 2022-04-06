@@ -85,6 +85,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   data() {
     return {
@@ -136,6 +138,13 @@ export default {
   created() {
     this.getMemberList();
     // this.getAddValue()
+    // const years = _.range(1911, 2014);
+    // console.log(years);
+    const map = { TW: '台灣', JP: '日本', CN: '中國' };
+    const isTWInMap = _.has(map, 'JP');
+    if (isTWInMap === true) {
+      console.log('日本有在裡面');
+    }
   },
 };
 </script>
