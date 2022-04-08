@@ -23,7 +23,15 @@
     <el-table-column prop="currency" label="幣別" align="center"> </el-table-column>
     <el-table-column sortable prop="status" label="狀態" align="center">
       <template v-slot="{ row }">
-        <el-tag :type="row.status === '啟動' ? 'success' : 'danger'">
+        <el-tag
+          :type="
+            row.status === '啟動'
+              ? 'success'
+              : 'danger' && row.status === '啟用'
+              ? 'warning'
+              : 'danger'
+          "
+        >
           {{ row.status }}
         </el-tag>
       </template>
@@ -44,7 +52,7 @@
     <el-table-column label="操作" align="center">
       <template #default="scope">
         <el-button size="small" type="warning" @click="handleEdit(scope.$index, scope.row)"
-          >Edit</el-button
+          >Detail</el-button
         >
       </template>
     </el-table-column>
@@ -143,11 +151,11 @@ export default {
             // forEach groupDetail每個item
             _.forEach(this.groupDetail, (item, key) => {
               console.log(item, key);
-              if (item.status === 0) {
+              if (item.status === 'disable') {
                 // 0顯示關閉
                 this.groupDetail[key].status = '關閉';
-              } else if (item.status === 1) {
-                // 0顯示關閉
+              } else if (item.status === 'enable') {
+                // 1顯示啟動
                 this.groupDetail[key].status = '啟動';
               }
             });

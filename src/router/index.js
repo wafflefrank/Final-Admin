@@ -50,6 +50,15 @@ const routes = [
           module: '個人資訊',
         },
       },
+      {
+        path: 'tags',
+        name: '標籤管理',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Tags.vue'),
+        meta: {
+          title: '標籤管理',
+          module: '個人資訊',
+        },
+      },
     ],
   },
   {

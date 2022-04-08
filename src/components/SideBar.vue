@@ -29,7 +29,7 @@
           <el-menu-item index="1-1-4" @click="failDetail()">登入失敗名單</el-menu-item>
           <el-menu-item index="1-1-5">註冊失敗列表</el-menu-item>
           <el-menu-item index="1-1-6" @click="groupDetail()">組別層級設置</el-menu-item>
-          <el-menu-item index="1-1-7">標籤管理</el-menu-item>
+          <el-menu-item index="1-1-7" @click="tagsDetail()">標籤管理</el-menu-item>
         </el-sub-menu>
 
         <el-menu-item index="1-2">財務管理</el-menu-item>
@@ -152,6 +152,9 @@ export default defineComponent({
     },
     moneyDetail() {
       this.$router.push('/main/money');
+    },
+    tagsDetail() {
+      this.$router.push('/tags');
     },
     chatRoom() {
       this.$router.push('/chatroom');

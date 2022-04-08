@@ -49,8 +49,8 @@
                                 :loading="loading1"
                                 active-color="#067c6b"
                                 inactive-color="#bb0011"
-                                :active-value="1"
-                                :inactive-value="0"
+                                active-value="open"
+                                inactive-value="close"
                               ></el-switch>
                             </el-form-item>
                           </el-col>
@@ -91,7 +91,15 @@
                           <el-col :span="12" class="add_left_style_1">
                             <!-- 前台顯示 -->
                             <el-form-item class="ms-4" label="前台顯示" prop="show_status">
-                              <el-switch v-model="addRuleForm.show_status"></el-switch>
+                              <el-switch
+                                v-model="addRuleForm.show_status"
+                                @change="changeShowStatus($event)"
+                                :loading="loading2"
+                                active-color="#067c6b"
+                                inactive-color="#bb0011"
+                                active-value="show"
+                                inactive-value="hide"
+                              ></el-switch>
                             </el-form-item>
                           </el-col>
                           <!-- 保級條件起始層級 -->
@@ -122,8 +130,8 @@
                                 size="small"
                                 @change="changeStatus($event)"
                               >
-                                <el-radio label="1">啟用</el-radio>
-                                <el-radio label="0">停用</el-radio>
+                                <el-radio label="啟用">啟用</el-radio>
+                                <el-radio label="停用">停用</el-radio>
                               </el-radio-group>
                             </el-form-item>
                           </el-col>
@@ -493,15 +501,17 @@ export default {
         group_name: '',
         currency: '',
         status: '', // 狀態0停用1激活
-        auto_rank: '', // 0關閉1啟用
+        auto_rank: '', // close關閉 open啟用
         date_range: [], // 複選逗號區隔
         upgrade_con: '', // 升級條件資格 0 AMD(均需達成) 1 OR(任一即可)
         reserve_upgrade: '', // 保留條件資格 0 AMD(均需達成) 1 OR(任一即可))
         reserve_level: '', // 保級條件起始層級
-        show_status: '', // 前台顯示:0不顯示1顯示
+        show_status: '', // 前台顯示:hide不顯示 show顯示
       },
       // 自動層級設置-讀取圖示
       loading1: false,
+      // 前台顯示-讀取圖示
+      loading2: false,
       // 下方層級設置
       rankSetting: {
         // group_id: '',
@@ -744,13 +754,13 @@ export default {
     changeAutoRank(item) {
       this.loading1 = true;
       // let item = 2;
-      if (item === 1) {
-        this.addRuleForm.auto_rank = 1;
+      if (item === 'open') {
+        this.addRuleForm.auto_rank = 'open';
         ElMessage({ showClose: true, message: '層級已開啟!', type: 'success' });
         console.log(this.addRuleForm.auto_rank);
-      } else if (item === 0) {
+      } else if (item === 'close') {
         ElMessage({ showClose: true, message: '層級已關閉!', type: 'warning' });
-        this.addRuleForm.auto_rank = 0;
+        this.addRuleForm.auto_rank = 'close';
         console.log(this.addRuleForm.auto_rank);
       }
       // 點擊後延遲幾秒才切換 ⏱
@@ -762,12 +772,34 @@ export default {
         }, 1000);
       });
     },
+    // 前台顯示配置 ❗❗
+    changeShowStatus(item) {
+      this.loading2 = true;
+      // let item = 2;
+      console.log(item);
+      if (item === 'show') {
+        this.addRuleForm.show_status = 'show';
+        ElMessage({ showClose: true, message: '前台已顯示!', type: 'success' });
+      } else if (item === 'hide') {
+        this.addRuleForm.show_status = 'hide';
+        ElMessage({ showClose: true, message: '前台已隱藏!', type: 'warning' });
+      }
+      // // 點擊後延遲幾秒才切換 ⏱
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          this.loading2 = false;
+          // ElMessage({ showClose: true, message: '層級已開啟!', type: 'success' });
+          return resolve(true);
+        }, 1000);
+      });
+    },
     // 狀態修改
     changeStatus(item) {
-      if (item === 1) {
-        this.status = 1; // 狀態開啟
-      } else if (item === 0) {
-        this.status = 0; // 狀態關閉
+      console.log(item);
+      if (item === '啟用') {
+        this.addRuleForm.status = '啟用'; // 狀態開啟
+      } else if (item === '停用') {
+        this.addRuleForm.status = '停用'; // 狀態關閉
       }
     },
     // 新增下方層級
