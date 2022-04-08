@@ -174,7 +174,12 @@
 </template>
 
 <script>
+import { Search } from '@element-plus/icons';
+
 export default {
+  components: {
+    Search,
+  },
   data() {
     return {
       // 上方搜尋區間
