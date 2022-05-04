@@ -29,6 +29,12 @@
               ? 'success'
               : 'danger' && row.status === '啟用'
               ? 'warning'
+              : 'danger' && row.status === '0'
+              ? 'warning'
+              : 'danger' && row.status === '1'
+              ? 'warning'
+              : 'danger' && row.status === '2'
+              ? 'warning'
               : 'danger'
           "
         >
