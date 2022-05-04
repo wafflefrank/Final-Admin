@@ -5,4 +5,11 @@
 
 <style lang="scss">
 @import './assets/all.scss';
+.add_left_style_1 {
+  & .el-form-item {
+    display: inline-block; //el-form-item的標題顯示再輸入框上面
+    margin-bottom: 10px;
+    text-align: left;
+  }
+}
 </style>

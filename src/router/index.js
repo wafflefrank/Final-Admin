@@ -79,6 +79,16 @@ const routes = [
           module: '提款記錄頁面',
         },
       },
+      // 銀行列表
+      {
+        path: 'banklist',
+        name: '銀行列表',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/BankList.vue'),
+        meta: {
+          title: '銀行列表',
+          module: '銀行列表',
+        },
+      },
     ],
   },
   {
