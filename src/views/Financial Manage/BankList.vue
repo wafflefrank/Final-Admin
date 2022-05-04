@@ -95,22 +95,22 @@
     class="tags_table_style"
   >
     <el-table-column prop="id" label="#" align="center" width="50" />
-    <el-table-column prop="bank" width="110" label="銀行名稱" sortable align="center">
+    <el-table-column prop="bank_cn" width="110" label="銀行名稱" sortable align="center">
     </el-table-column>
-    <el-table-column prop="agency_team" label="熱門" align="center" />
-    <el-table-column prop="bank_cn" label="顯示名稱" align="center">
+    <el-table-column prop="bank" label="熱門" align="center">
       <template v-slot="{ row }">
-        <el-tag :type="row.hierarchy === 'D_group' ? 'success' : 'danger'">
-          {{ row.hierarchy }}
+        <el-tag :type="row.bank === 'CTBC' ? 'danger' : 'success'">
+          {{ 'V' }}
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="Createuser" width="90" label="銀行類型" align="center" />
+    <el-table-column prop="bank" label="顯示名稱" align="center"> </el-table-column>
+    <el-table-column prop="bank_type" width="90" label="銀行類型" align="center" />
     <el-table-column prop="" width="90" label="幣別" align="center" />
     <el-table-column prop="" label="網銀網址" align="center" />
     <el-table-column prop="img" label="圖片" width="120" align="center"> </el-table-column>
 
-    <el-table-column sortable width="110" prop="withdraw_amount" label="操作" align="center" />
+    <el-table-column sortable width="110" prop="" label="操作" align="center" />
     <el-table-column sortable width="110" prop="withdraw_amount" label="轉出銀行" align="center" />
     <el-table-column width="110" prop="withdraw_amount" label="綁定銀行卡" align="center" />
   </el-table>
