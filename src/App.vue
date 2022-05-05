@@ -12,4 +12,14 @@
     text-align: left;
   }
 }
+.el-select-dropdown__item.selected {
+  color: #3d8ed5;
+  font-weight: 700;
+  &:hover {
+    color: white;
+    background: #3d8ed5;
+    transition: 0.5s;
+    font-weight: bold;
+  }
+}
 </style>
