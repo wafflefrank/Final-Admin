@@ -7,53 +7,57 @@
       <el-row>
         <el-col :span="12">
           <!-- 銀行類型 -->
-          <el-form-item label="銀行類型" prop="bank_type">
+          <el-form-item label="銀行類型" prop="bank_type" class="bankDetail_style">
             <el-input v-model="addBankDetail.bank_type"></el-input>
           </el-form-item>
           <!-- 銀行名稱 -->
-          <el-form-item label="銀行名稱" prop="bank">
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
             <el-input v-model="addBankDetail.bank"></el-input>
           </el-form-item>
           <!-- 簡中名稱 -->
-          <el-form-item label="簡中名稱" prop="bank_cn">
+          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
             <el-col :span="11">
               <el-input v-model="addBankDetail.bank_cn"></el-input>
             </el-col>
           </el-form-item>
           <!-- 預設語系名稱 -->
-          <el-form-item label="預設語系名稱" prop="bank_preset">
+          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
             <el-input v-model="addBankDetail.bank_preset"></el-input>
           </el-form-item>
         </el-col>
         <!-- 右半邊 -->
         <el-col :span="12">
           <!-- 圖片 -->
-          <div class="d-flex">
-            <el-form-item label="圖片" prop="img">
-              <el-upload
-                class="upload-demo"
-                action="#"
-                ref="upload"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :on-change="handleChange"
-                :on-exceed="handleExceed"
-                :file-list="fileList1"
-                list-type="picture"
-                :auto-upload="false"
-                :limit="1"
-              >
-                <el-button type="primary" size="small"> Upload</el-button>
-                <!-- <template #tip>
-                  <div class="el-upload__tip">
-                    <span style="color: #ff77bb">*</span> jpg/png files with a size less than 500kb
-                  </div>
-                </template> -->
-              </el-upload>
-            </el-form-item>
-          </div>
+          <el-form-item label="圖片" prop="img" class="bankDetail_style">
+            <!-- <el-input disabled v-model="addBankDetail.img"></el-input> -->
+            <el-upload
+              class="upload-demo ms-5"
+              action="#"
+              ref="upload"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :on-change="UploadImage"
+              :on-exceed="handleExceed"
+              :file-list="fileList1"
+              list-type="picture-card"
+              :auto-upload="false"
+              :limit="1"
+            >
+              <el-icon class="Plus fs-4"> <Plus></Plus></el-icon>
+              <template #tip>
+                <div class="el-upload__tip">
+                  <span style="color: #ff77bb">*</span> 單次僅限上傳一張圖片
+                </div>
+              </template>
+            </el-upload>
+          </el-form-item>
+          <!-- 圖片預覽談窗 -->
+          <el-dialog v-model="dialogVisible">
+            <img style="width: 100%; height: 100%" :src="dialogImageUrl" alt="" />
+          </el-dialog>
+
           <!-- 網銀網址 -->
-          <el-form-item label="網銀網址" prop="url">
+          <el-form-item label="網銀網址" prop="url" class="bankDetail_style">
             <el-input v-model="addBankDetail.url"></el-input>
           </el-form-item>
         </el-col>
@@ -200,6 +204,9 @@
 
 <script>
 import _ from 'lodash';
+import { ElMessage } from 'element-plus';
+
+const fd = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
 
 export default {
   data() {
@@ -226,7 +233,7 @@ export default {
       },
       // 新增銀行
       addBank_visible: false, // 展開彈窗
-      // 銀行卡彈窗詳細資料
+      // 銀行彈窗詳細資料
       addBankDetail: {
         bank_type: '',
         bank: '',
@@ -235,6 +242,10 @@ export default {
         img: '',
         url: '',
       },
+      // 圖片上傳
+      fileList1: [], // 存file的地方
+      dialogImageUrl: '', // 圖片網址
+      dialogVisible: false, // 圖片預覽
       // 新增銀行卡規則
       BankRules: {
         bank_type: [
@@ -412,8 +423,49 @@ export default {
         console.log('啥都沒跑');
       }
     },
+    // 上傳圖片的方法
+    UploadImage(file, filelist1) {
+      console.log(file, filelist1);
+
+      fd.append('img', file.raw); // 傳給後台接收的名字 file
+      ElMessage({ showClose: true, message: '圖片已上傳成功!', type: 'success' });
+      // fd.append('bank_type', this.addBankDetail.bank_type); // 傳給後台的銀行類型
+      // fd.append('bank', this.addBankDetail.bank); // 傳給後台的銀行類型
+      // fd.append('bank_cn', this.addBankDetail.bank_cn); // 傳給後台的銀行類型
+      // fd.append('bank_preset', this.addBankDetail.bank_preset); // 傳給後台的銀行類型
+      // fd.append('url', this.addBankDetail.url); // 傳給後台的銀行類型
+      // this.$http
+      //   .post('http://167.179.74.47:4000/backend/financ/bankListAdd', fd)
+      //   .then((response) => {
+      //     // 上传成功后返回的数据,
+      //     console.log(`上传图片到:${response.data.data}`);
+      //     // 将图片地址给到表单.
+      //     // this.addBankDetail.img = response.data;
+      //   });
+    },
+    // 刪除圖片功能
+    handleRemove(file, fileList1) {
+      console.log(file, fileList1);
+    },
+    // 預覽圖片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+      this.dialogVisible = true;
+      this.dialogImageUrl = file.url;
+    },
+    // 覆蓋前個圖片
+    handleExceed(files) {
+      this.$refs.upload.clearFiles();
+      this.$refs.upload.handleStart(files[0]);
+    },
+
     // 送出新增銀行表單
     doAddBank() {
+      fd.append('bank_type', this.addBankDetail.bank_type); // 傳給後台的銀行類型
+      fd.append('bank', this.addBankDetail.bank); // 傳給後台的銀行類型
+      fd.append('bank_cn', this.addBankDetail.bank_cn); // 傳給後台的銀行類型
+      fd.append('bank_preset', this.addBankDetail.bank_preset); // 傳給後台的銀行類型
+      fd.append('url', this.addBankDetail.url); // 傳給後台的銀行類型
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       // 執行校驗
       this.$refs.addBankRules.validate((valid) => {
@@ -429,23 +481,17 @@ export default {
         // ....
         // axios
         this.$http
-          .post(`${testapi}/backend/financ/bankListAdd`, this.addBankDetail)
+          .post(`${testapi}/backend/financ/bankListAdd`, fd)
           .then((response) => {
-            if (response.data.code === 200) {
-              this.$swal.fire('新增完成', '銀行新增成功!', 'success');
-              console.log(response.data);
-              this.addBank_visible = false;
-              this.getBank_list();
-            } else {
-              this.$swal.fire('新增失敗', `${response.data.msg}`, 'error');
-              console.log(response.data);
-            }
+            this.$swal.fire('新增完成', '銀行新增成功!', 'success');
+            console.log(response.data);
           })
           .catch((error) => {
             console.log(error);
             console.log('新增失敗，銀行名稱已新增過');
           });
-
+        this.addBank_visible = false;
+        this.getBank_list();
         return true;
       });
       //   resetForm(); // 把表單重置成預設值
@@ -525,5 +571,10 @@ export default {
     background: #0f0f0f !important;
     color: white;
   }
+}
+.bankDetail_style .el-input__inner {
+  border: none;
+  border-bottom: 1px solid #dcdfe6;
+  padding: 20px 0;
 }
 </style>
