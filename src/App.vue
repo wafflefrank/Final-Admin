@@ -22,4 +22,17 @@
     font-weight: bold;
   }
 }
+// 編輯Icon 樣式
+.editBtn2 {
+  background: none;
+  color: #409eff;
+  &:hover {
+    transition: 0.5s;
+    background: #236aa5;
+    color: #fff;
+  }
+  & .edit {
+    font-size: 20px;
+  }
+}
 </style>

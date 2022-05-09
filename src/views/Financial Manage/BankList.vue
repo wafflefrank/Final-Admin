@@ -38,6 +38,7 @@
               :on-remove="handleRemove"
               :on-change="UploadImage"
               :on-exceed="handleExceed"
+              :on-progress="uploadProcess"
               :file-list="fileList1"
               list-type="picture-card"
               :auto-upload="false"
@@ -65,7 +66,7 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click.prevent="resetForm()"> 重置 </el-button>
+        <el-button type="primary" @click.prevent="resetAddBank_form()"> 重置 </el-button>
         <el-button @click="addBank_visible = false">取消</el-button>
         <el-button type="primary" @click="doAddBank()">確認</el-button>
       </span>
@@ -91,7 +92,7 @@
                     <el-option
                       v-for="item in searchOption.bankName_options"
                       :key="item.id"
-                      :label="item.bank_cn"
+                      :label="item.bank"
                       :value="item"
                     ></el-option>
                   </el-select>
@@ -123,7 +124,7 @@
                     <el-option
                       v-for="item in searchOption.bankTransfer_options"
                       :key="item.id"
-                      :label="item.bank"
+                      :label="item.bank_cn"
                       :value="item"
                     ></el-option>
                   </el-select>
@@ -176,7 +177,7 @@
     class="tags_table_style"
   >
     <el-table-column prop="id" label="#" align="center" width="50" />
-    <el-table-column prop="bank_cn" width="110" label="銀行名稱" sortable align="center">
+    <el-table-column prop="bank" width="110" label="銀行名稱" sortable align="center">
     </el-table-column>
     <el-table-column prop="bank" label="熱門" align="center">
       <template v-slot="{ row }">
@@ -185,32 +186,48 @@
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="bank" label="顯示名稱" align="center"> </el-table-column>
+    <el-table-column prop="bank_cn" label="顯示名稱" align="center"> </el-table-column>
     <el-table-column prop="bank_type" width="90" label="銀行類型" align="center" />
     <el-table-column prop="" width="90" label="幣別" align="center" />
     <el-table-column prop="url" label="網銀網址" align="center" />
-    <el-table-column prop="img" label="圖片" width="120" align="center">
+    <el-table-column prop="img" label="圖片" width="200" align="center" class="image_size">
       <!--插入圖片-->
-      <template v-slot="scope">
-        <img :src="scope.row.img" style="width: 80px; height: 100px" alt="" />
+      <template v-slot="scope" class="image_size">
+        <img class="image_size" :src="imageUrl + scope.row.img" alt="" />
       </template>
     </el-table-column>
 
-    <el-table-column sortable width="110" prop="" label="操作" align="center" />
+    <el-table-column width="110" prop="" label="操作" align="center">
+      <template #default="scope">
+        <el-button class="editBtn2" size="small" @click="openModal(scope.row)"
+          ><el-icon class="edit"> <Edit></Edit></el-icon>
+        </el-button>
+      </template>
+    </el-table-column>
     <el-table-column sortable width="110" prop="withdraw_amount" label="轉出銀行" align="center" />
     <el-table-column width="110" prop="withdraw_amount" label="綁定銀行卡" align="center" />
   </el-table>
+
+  <!-- 編輯談窗 -->
+  <BankEdit ref="BankEditModal" :bankList_data="tempProduct"></BankEdit>
 </template>
 
 <script>
 import _ from 'lodash';
 import { ElMessage } from 'element-plus';
+import { ref } from 'vue';
+import BankEdit from '../../components/OpenModal/FinancialModal/BankList_Edit.vue';
 
 const fd = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
-
 export default {
+  components: {
+    BankEdit,
+  },
   data() {
     return {
+      imageUrl: 'http://167.179.74.47:4000/bankImages/', // 本地圖片路徑
+      tempProduct: [],
+
       // 上方搜尋區間
       searchOption: {
         bankName: '',
@@ -246,6 +263,7 @@ export default {
       fileList1: [], // 存file的地方
       dialogImageUrl: '', // 圖片網址
       dialogVisible: false, // 圖片預覽
+      persent: ref(0), // 圖片上傳時的轉圈
       // 新增銀行卡規則
       BankRules: {
         bank_type: [
@@ -361,19 +379,24 @@ export default {
       ) {
         return 'header_title_dark';
       }
-      if (
-        (rowIndex === 1 && columnIndex === 0)
-        || (rowIndex === 1 && columnIndex === 1)
-        || (rowIndex === 2 && columnIndex === 2)
-      ) {
-        return 'header_title_dark';
+      if (columnIndex === 7 && rowIndex === 1) {
+        return 'image_size';
       }
       return 'header_title_light';
     },
-    // 切換選擇銀行名稱
+    // 列的更改
+    // setCellStyle({ row, rowIndex, columnIndex }) {
+    //   // const columns = [1]; // 想要改变列的索引
+    //   console.log(rowIndex, columnIndex);
+    //   if (row.rowIndex >= 0) {
+    //     return 'image_size';
+    //   }
+    //   return 'header_title_dark';
+    // },
+
     chooseBank_name(item) {
-      console.log(item.bank_cn);
-      this.searchOption.bankName = item.bank_cn;
+      console.log(item.bank);
+      this.searchOption.bankName = item.bank;
     },
     // 切換選擇銀行類型
     chooseBank_type(item) {
@@ -382,8 +405,8 @@ export default {
     },
     // 切換選擇轉出銀行顯示
     chooseBank_transfer(item) {
-      console.log(item.bank);
-      this.searchOption.bank_transfer = item.bank;
+      console.log(item.bank_cn);
+      this.searchOption.bank_transfer = item.bank_cn;
     },
     // 切換選擇綁定銀行顯示
     chooseBank_link(item) {
@@ -393,8 +416,12 @@ export default {
     // 重置搜尋表單
     resetForm() {
       this.$refs.bankList_form.resetFields(); // el.form.item裡面的prop一定要不一樣
-      this.$refs.addBankRules.resetFields(); // 新增銀行表單重置
       this.getBank_list();
+    },
+    // 重置新增銀行表單
+    resetAddBank_form() {
+      this.$refs.addBankRules.resetFields(); // el.form.item裡面的prop一定要不一樣
+      // this.getBank_list();
     },
     // 搜尋
     imtScreen() {
@@ -409,15 +436,31 @@ export default {
           type: 'warning',
           message: '請選擇搜尋範圍！',
         });
+        // 依什麼什麼搜尋
       } else if (this.searchOption.bankName !== '') {
         console.log('抓到銀行名稱囉');
+        this.bankList.bankList_table = this.bankList.filterTableData.filter((item1) => {
+          console.log(item1.bank);
+          return item1.bank === this.searchOption.bankName;
+        });
         // 原表格數據  = 篩選後的表格內容
-        // 依銀行類型搜尋
       } else if (this.searchOption.bankType !== '') {
         console.log('抓到銀行類型囉');
         this.bankList.bankList_table = this.bankList.filterTableData.filter((item1) => {
           console.log(item1.bank_type);
           return item1.bank_type === this.searchOption.bankType;
+        });
+      } else if (this.searchOption.bank_transfer !== '') {
+        console.log('抓到銀行顯示囉');
+        this.bankList.bankList_table = this.bankList.filterTableData.filter((item1) => {
+          console.log(item1.bank_cn);
+          return item1.bank_cn === this.searchOption.bank_transfer;
+        });
+      } else if (this.searchOption.bank_link !== '') {
+        console.log('抓到綁定銀行囉');
+        this.bankList.bankList_table = this.bankList.filterTableData.filter((item1) => {
+          console.log(item1.bank_preset);
+          return item1.bank_preset === this.searchOption.bank_link;
         });
       } else {
         console.log('啥都沒跑');
@@ -458,7 +501,10 @@ export default {
       this.$refs.upload.clearFiles();
       this.$refs.upload.handleStart(files[0]);
     },
-
+    uploadProcess(event, file, fileList) {
+      console.log(event.percent, file, fileList);
+      this.percent.value = Math.floor(event.percent);
+    },
     // 送出新增銀行表單
     doAddBank() {
       fd.append('bank_type', this.addBankDetail.bank_type); // 傳給後台的銀行類型
@@ -495,6 +541,15 @@ export default {
         return true;
       });
       //   resetForm(); // 把表單重置成預設值
+    },
+    // 打開會員訊息Modal
+    openModal(item) {
+      console.log(item);
+
+      this.tempProduct = item;
+
+      const EditComponent = this.$refs.BankEditModal;
+      EditComponent.showModal();
     },
   },
   created() {
@@ -576,5 +631,10 @@ export default {
   border: none;
   border-bottom: 1px solid #dcdfe6;
   padding: 20px 0;
+}
+.image_size {
+  width: 100%;
+  height: 50px;
+  object-fit: cover;
 }
 </style>
