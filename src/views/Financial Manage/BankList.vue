@@ -219,12 +219,15 @@ import { ref } from 'vue';
 import BankEdit from '../../components/OpenModal/FinancialModal/BankList_Edit.vue';
 
 const fd = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
+
 export default {
+  inject: ['reload'],
   components: {
     BankEdit,
   },
   data() {
     return {
+      isLoading: false,
       imageUrl: 'http://167.179.74.47:4000/bankImages/', // 本地圖片路徑
       tempProduct: [],
 

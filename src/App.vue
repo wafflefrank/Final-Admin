@@ -1,7 +1,31 @@
 <template>
   <!-- Modal -->
-  <router-view />
+  <router-view v-if="isRouterAlive" />
 </template>
+
+<script>
+export default {
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  data() {
+    return {
+      isRouterAlive: true,
+    };
+  },
+  methods: {
+    // 頁面重新整理
+    reload() {
+      this.isRouterAlive = false;
+      this.$nextTick(() => {
+        this.isRouterAlive = true;
+      });
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 @import './assets/all.scss';

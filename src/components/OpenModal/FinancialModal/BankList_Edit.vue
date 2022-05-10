@@ -1,4 +1,6 @@
 <template>
+  <!-- 載入讀取 -->
+  <Loading :active="isLoading"></Loading>
   <div
     class="modal fade"
     id="exampleModal"
@@ -79,14 +81,38 @@
           <!-- 新圖片彈窗 -->
           <el-dialog v-model="tagsDomainNameVisible" title="新圖片">
             <el-form :model="tagsNewNameForm">
-              <el-form-item label="新圖片 :">
-                <el-input class="memberIdStyle" v-model="tagsNewNameForm.img"></el-input>
+              <el-form-item>
+                <el-upload
+                  class="upload-demo ms-5"
+                  action="#"
+                  ref="upload"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleRemove"
+                  :on-change="UploadImage"
+                  :on-exceed="handleExceed"
+                  :on-progress="uploadProcess"
+                  :file-list="fileList1"
+                  list-type="picture-card"
+                  :auto-upload="false"
+                  :limit="1"
+                >
+                  <el-icon class="Plus fs-4"> <Plus></Plus></el-icon>
+                  <template #tip>
+                    <div class="el-upload__tip">
+                      <span style="color: #ff77bb">*</span> 單次僅限上傳一張圖片
+                    </div>
+                  </template>
+                </el-upload>
               </el-form-item>
+              <!-- 圖片預覽談窗 -->
+              <el-dialog v-model="dialogVisible">
+                <img style="width: 100%; height: 100%" :src="dialogImageUrl" alt="" />
+              </el-dialog>
             </el-form>
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="tagsDomainNameVisible = false">取消</el-button>
-                <el-button type="primary" @click="newTags_Domain_Name()">確認</el-button>
+                <el-button type="primary" @click="img_edit()">確認</el-button>
               </span>
             </template>
           </el-dialog>
@@ -100,7 +126,7 @@
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="tagsDomainNameVisible = false">取消</el-button>
-                <el-button type="primary" @click="newTags_Domain_Name()">確認</el-button>
+                <el-button type="primary" @click="newUrl_edit()">確認</el-button>
               </span>
             </template>
           </el-dialog>
@@ -196,8 +222,12 @@
 <script>
 import Modal from 'bootstrap/js/dist/modal';
 import { Edit } from '@element-plus/icons';
+import { ElMessage } from 'element-plus';
+
+const newImg = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
 
 export default {
+  inject: ['reload'],
   props: {
     // 外層傳進來的資料(每次點擊資料都會不同 要寫在watch裡面)
     bankList_data: {
@@ -216,9 +246,11 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       tempProduct: {},
-      // 老帶新視窗專用
+      // 新銀行表單
       tagsNewNameForm: {
+        id: '',
         bank_type: '',
         bank: '',
         bank_cn: '',
@@ -232,6 +264,10 @@ export default {
       tagsDomainVisible: false,
       tagsDomainNameVisible: false,
       bankUrlVisible: false,
+      // 圖片上傳
+      fileList1: [], // 存file的地方
+      dialogImageUrl: '', // 圖片網址
+      dialogVisible: false, // 圖片預覽
     };
   },
   methods: {
@@ -248,65 +284,93 @@ export default {
     },
     // 新標籤名稱
     newTags_Name() {
-      this.tempProduct.title = this.tagsNewNameForm.title;
+      this.tempProduct.bank = this.tagsNewNameForm.bank;
       this.tagsNameVisible = false;
     },
     // 新描述
     newTags_Content() {
-      this.tempProduct.content = this.tagsNewNameForm.content;
+      this.tempProduct.bank_type = this.tagsNewNameForm.bank_type;
       this.tagsContentVisible = false;
     },
     // 新備註
     newTags_Remark() {
-      this.tempProduct.remark = this.tagsNewNameForm.remark;
+      this.tempProduct.bank_cn = this.tagsNewNameForm.bank_cn;
       this.tagsRemarkVisible = false;
     },
     // 新域名綁定
     newTags_Domain() {
-      this.tempProduct.domain = this.tagsNewNameForm.domain;
+      this.tempProduct.bank_preset = this.tagsNewNameForm.bank_preset;
       this.tagsDomainVisible = false;
     },
-    // 域名綁定更改
-    changeStatus(item) {
-      console.log(item);
-      if (item === '是') {
-        this.tagsNewNameForm.domain = '是'; // 狀態開啟
-        // this.tagsNewNameForm.domain = this.tempProduct.domain;
-      } else if (item === '否') {
-        this.tagsNewNameForm.domain = '否'; // 狀態關閉
-        // this.tagsNewNameForm.domain = this.tempProduct.domain;
-      }
+
+    // 新圖片
+    img_edit() {
+      this.tempProduct.img = this.tagsNewNameForm.img;
+      ElMessage({ showClose: true, message: '圖片已上傳成功!', type: 'success' });
+      this.tagsDomainNameVisible = false;
     },
-    // 新域名稱
-    newTags_Domain_Name() {
-      this.tempProduct.domain_name = this.tagsNewNameForm.domain_name;
+    // 新url
+    newUrl_edit() {
+      this.tempProduct.url = this.tagsNewNameForm.url;
       this.tagsDomainNameVisible = false;
     },
     // 編輯完成送出
     editConfirm() {
       this.isLoading = true;
       // this.tagsNewNameForm.id = this.tempProduct.id;
-      this.tagsNewNameForm.id = this.tempProduct.id;
-      this.tagsNewNameForm.title = this.tempProduct.title;
-      this.tagsNewNameForm.content = this.tempProduct.content;
-      this.tagsNewNameForm.remark = this.tempProduct.remark;
-      this.tagsNewNameForm.domain = this.tempProduct.domain;
-      this.tagsNewNameForm.domain_name = this.tempProduct.domain_name;
+      // this.tagsNewNameForm.bank = this.tempProduct.bank;
+      // this.tagsNewNameForm.bank_type = this.tempProduct.bank_type;
+      // this.tagsNewNameForm.bank_cn = this.tempProduct.bank_cn;
+      // this.tagsNewNameForm.bank_preset = this.tempProduct.bank_preset;
+      // this.tagsNewNameForm.img = this.tempProduct.img;
+      // this.tagsNewNameForm.url = this.tempProduct.url;
+      newImg.append('id', this.tempProduct.id); // 傳給後台的銀行類型
+      newImg.append('bank_type', this.tempProduct.bank_type); // 傳給後台的銀行類型
+      newImg.append('bank', this.tempProduct.bank); // 傳給後台的銀行類型
+      newImg.append('bank_cn', this.tempProduct.bank_cn); // 傳給後台的銀行類型
+      newImg.append('bank_preset', this.tempProduct.bank_preset); // 傳給後台的銀行類型
+      newImg.append('url', this.tempProduct.url); // 傳給後台的銀行類型
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
-      this.$http
-        .post(`${testapi}/backend/members/tags_update`, this.tagsNewNameForm)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.data.code === 200) {
-            this.$swal.fire('標籤已修改!', `${res.data.msg}`, 'success');
-            // this.tempProduct.teacher = this.selectValue.account;
-            // this.hideModal();
-            // console.log(this.tempProduct.id);
-          } else {
-            console.log(res.data);
-          }
-        });
+      this.$http.post(`${testapi}/backend/financ/bankListUpdate`, newImg).then((res) => {
+        this.isLoading = false;
+        if (res.data.code === 200) {
+          this.$swal.fire('銀行已修改!', `${res.data.msg}`, 'success');
+
+          // this.tempProduct.teacher = this.selectValue.account;
+          // this.hideModal();
+        } else {
+          this.$swal.fire('修改失敗!', `${res.data.msg}`, 'error');
+          console.log(res.data);
+        }
+      });
+      this.reload();
       this.hideModal();
+    },
+    // 上傳圖片的方法
+    UploadImage(file, filelist1) {
+      console.log(file, filelist1);
+      // this.fileList1.splice(0, 1);
+      newImg.append('img', file.raw); // 傳給後台接收的名字 file
+      this.tagsNewNameForm.img = file.raw.name;
+    },
+    // 刪除圖片功能
+    handleRemove(file, fileList1) {
+      console.log(file, fileList1);
+    },
+    // 預覽圖片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+      this.dialogVisible = true;
+      this.dialogImageUrl = file.url;
+    },
+    // 覆蓋前個圖片
+    handleExceed(files) {
+      this.$refs.upload.clearFiles();
+      this.$refs.upload.handleStart(files[0]);
+    },
+    uploadProcess(event, file, fileList) {
+      console.log(event.percent, file, fileList);
+      this.percent.value = Math.floor(event.percent);
     },
   },
   components: {
