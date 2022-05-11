@@ -89,6 +89,16 @@ const routes = [
           module: '銀行列表',
         },
       },
+      // 公司出入款帳戶
+      {
+        path: 'companyaccount',
+        name: '公司出入款帳戶',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/CompanyAccount.vue'),
+        meta: {
+          title: '公司出入款帳戶',
+          module: '公司出入款帳戶',
+        },
+      },
     ],
   },
   {

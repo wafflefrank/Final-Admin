@@ -1,6 +1,4 @@
 <template>
-  <!-- 載入讀取 -->
-  <Loading :active="isLoading"></Loading>
   <div
     class="modal fade"
     id="exampleModal"
@@ -240,7 +238,6 @@ export default {
   watch: {
     bankList_data() {
       this.tempProduct = this.bankList_data; // 內層等於外層
-      //   this.getBankCard();
       //   this.getWalletInfo();
     },
   },
@@ -335,7 +332,7 @@ export default {
         this.isLoading = false;
         if (res.data.code === 200) {
           this.$swal.fire('銀行已修改!', `${res.data.msg}`, 'success');
-
+          // this.reload();
           // this.tempProduct.teacher = this.selectValue.account;
           // this.hideModal();
         } else {
@@ -343,8 +340,9 @@ export default {
           console.log(res.data);
         }
       });
-      this.reload();
       this.hideModal();
+      this.reload();
+      console.log(...newImg);
     },
     // 上傳圖片的方法
     UploadImage(file, filelist1) {
@@ -378,7 +376,6 @@ export default {
   },
   mounted() {
     this.modal = new Modal(this.$refs.modal);
-    // this.modal.show();
   },
 };
 </script>
