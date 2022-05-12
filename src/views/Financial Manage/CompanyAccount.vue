@@ -122,7 +122,7 @@
   </div>
   <el-table
     ref="bankList_table"
-    :data="companyList.bankList_table"
+    :data="companyList.companyList_table"
     style="width: 100%"
     :header-cell-class-name="classNameFunc"
     class="tags_table_style"
@@ -130,24 +130,78 @@
     <el-table-column prop="id" label="#" align="center" width="50" />
     <el-table-column prop="bank" width="110" label="銀行名稱" sortable align="center">
     </el-table-column>
-    <el-table-column prop="bank_cn" label="顯示名稱" align="center"> </el-table-column>
+    <el-table-column prop="title_cn" width="110" label="顯示名稱" align="center"> </el-table-column>
     <el-table-column prop="bank_type" width="90" label="銀行類型" align="center" />
-    <el-table-column prop="bank" label="帳戶名稱" align="center">
+    <el-table-column prop="account" width="130" label="帳戶名稱" align="center"> </el-table-column>
+    <el-table-column prop="currency" width="100" label="幣別" align="center">
       <template v-slot="{ row }">
-        <el-tag :type="row.bank === 'CTBC' ? 'danger' : 'success'">
-          {{ 'V' }}
+        <el-tag :type="row.currency === '越南盾' ? 'danger' : 'success'">
+          {{ row.currency }}
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="" width="90" label="幣別" align="center" />
-    <el-table-column prop="url" label="網銀網址" align="center" />
-    <el-table-column prop="img" label="圖片" width="200" align="center" class="image_size">
-      <!--插入圖片-->
-      <template v-slot="scope" class="image_size">
-        <img class="image_size" :src="imageUrl + scope.row.img" alt="" />
-      </template>
+    <!-- 收款 -->
+    <el-table-column label="收款">
+      <el-table-column prop="vip_level" label="VIP等級" align="center" />
+      <el-table-column
+        prop="deposit_max_day"
+        label="單日存款額上限"
+        width="200"
+        align="center"
+        class="image_size"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="deposit_max_total"
+        width="200"
+        label="累計存款上限"
+        align="center"
+        :formatter="stateFormat"
+      />
+      <el-table-column sortable prop="status" label="狀態" align="center">
+        <template v-slot="{ row }">
+          <el-tag :type="row.status === 'enable' ? 'success' : 'danger'">
+            {{ '啟動' }}
+          </el-tag>
+        </template>
+      </el-table-column>
     </el-table-column>
 
+    <!-- 出款 -->
+    <el-table-column label="出款">
+      <el-table-column
+        :formatter="stateFormat"
+        width="110"
+        prop="dispensing_amount"
+        label="金額"
+        align="center"
+      >
+      </el-table-column>
+      <el-table-column sortable width="110" prop="dispensing_status" label="狀態" align="center">
+        <template v-slot="{ row }">
+          <el-tag :type="row.dispensing_status === 'enable' ? 'success' : 'danger'">
+            {{ '啟動' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table-column>
+    <el-table-column
+      :render-header="renderHeader"
+      sortable
+      width="150"
+      prop="balance_min"
+      align="center"
+    >
+      <!-- <template #header>
+        <div>
+          <div>餘額</div>
+          <div>最低餘額</div>
+        </div>
+      </template> -->
+    </el-table-column>
+    <el-table-column prop="remark" label="備註" align="center" />
+    <el-table-column sortable width="110" prop="" label="更新人員" align="center" />
+    <el-table-column sortable width="110" prop="" label="更新時間" align="center" />
     <el-table-column width="110" prop="" label="操作" align="center">
       <template #default="scope">
         <el-button class="editBtn2" size="small" @click="openModal(scope.row)"
@@ -155,8 +209,6 @@
         </el-button>
       </template>
     </el-table-column>
-    <el-table-column sortable width="110" prop="withdraw_amount" label="轉出銀行" align="center" />
-    <el-table-column width="110" prop="withdraw_amount" label="綁定銀行卡" align="center" />
   </el-table>
 </template>
 
@@ -190,6 +242,46 @@ export default {
     };
   },
   methods: {
+    // 客製欄位樣式
+    classNameFunc({ rowIndex, columnIndex }) {
+      console.log(rowIndex, columnIndex);
+      if (
+        (columnIndex === 0 && rowIndex === 0)
+        || (columnIndex === 2 && rowIndex === 0)
+        || (columnIndex === 4 && rowIndex === 0)
+        || (columnIndex === 6 && rowIndex === 0)
+        || (columnIndex === 8 && rowIndex === 0)
+        || (columnIndex === 10 && rowIndex === 0)
+      ) {
+        return 'header_title_dark';
+      }
+      if (columnIndex === 8 && rowIndex === 0) {
+        return 'text-second';
+      }
+      if (columnIndex === 7 && rowIndex === 1) {
+        return 'image_size';
+      }
+      return 'header_title_light';
+    },
+    // 千分位
+    stateFormat(row, column, cellValue) {
+      let bellValue = cellValue;
+      bellValue += '';
+      if (!bellValue.includes('.')) bellValue += '.';
+      return bellValue.replace(/(\d)(?=(\d{3})+\.)/g, ($0, $1) => `${$1},`).replace(/\.$/, '');
+    },
+    // 表頭換行
+    renderHeader(item) {
+      return item('div', {
+        attrs: {
+          class: 'cell',
+        },
+        domProps: {
+          innerHTML: '班级人数</br>(现有学生数/总学生数)',
+        },
+      });
+    },
+
     // 取得提款列表🍳
     getCompany_list() {
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
@@ -297,6 +389,7 @@ export default {
 .tags_table_style {
   border-radius: 10px;
 }
+
 // 新增銀行按鈕樣式
 .addBank_btn,
 .hotSort {

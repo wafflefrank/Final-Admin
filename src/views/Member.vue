@@ -64,8 +64,7 @@
   </el-table>
 
   <!-- 分頁套件 -->
-  <div class="titleSt
-  yle">
+  <div class="titleSt yle">
     <el-pagination
       class="pageStyle"
       background
