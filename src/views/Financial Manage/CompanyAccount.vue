@@ -2,7 +2,7 @@
   <!-- 載入讀取 -->
   <Loading :active="isLoading"></Loading>
   <div class="text-end mb-3">
-    <button type="button" class="btn hotSort btn-sm me-3">帳戶紀錄</button>
+    <button type="button" class="btn hotSort btn-sm me-3" @click="filter_status()">帳戶紀錄</button>
     <button type="button" class="btn addBank_btn btn-sm" @click="addBank_visible = true">
       新增
     </button>
@@ -53,14 +53,14 @@
                   <!-- 幣別 🍖-->
                   <el-form-item label="幣別" class="companyAccount_style me-2" prop="bankName">
                     <el-select
-                      v-model="searchOption.bankName"
+                      v-model="searchOption.currency"
                       placeholder="選擇幣別"
-                      @change="chooseBank_name(searchOption.bankName)"
+                      @change="chooseBank_name(searchOption.currency)"
                     >
                       <el-option
-                        v-for="item in searchOption.bankName_options"
+                        v-for="item in searchOption.currency_options"
                         :key="item.id"
-                        :label="item.bank"
+                        :label="item.currency"
                         :value="item"
                       ></el-option>
                     </el-select>
@@ -72,14 +72,14 @@
                     prop="bank_transfer"
                   >
                     <el-select
-                      v-model="searchOption.bank_transfer"
-                      placeholder="選擇轉出銀行"
-                      @change="chooseBank_transfer(searchOption.bank_transfer)"
+                      v-model="searchOption.deposit_status"
+                      placeholder="選擇狀態"
+                      @change="chooseBank_transfer(searchOption.deposit_status)"
                     >
                       <el-option
-                        v-for="item in searchOption.bankTransfer_options"
+                        v-for="item in searchOption.depositStatus_options"
                         :key="item.id"
-                        :label="item.bank_cn"
+                        :label="item.status"
                         :value="item"
                       ></el-option>
                     </el-select>
@@ -88,7 +88,7 @@
                   <el-form-item label="出款狀態" class="companyAccount_style me-2" prop="bank_link">
                     <el-select
                       v-model="searchOption.bank_link"
-                      placeholder="選擇綁定銀行卡"
+                      placeholder="選擇狀態"
                       @change="chooseBank_link(searchOption.bank_link)"
                     >
                       <el-option
@@ -185,23 +185,17 @@
         </template>
       </el-table-column>
     </el-table-column>
-    <el-table-column
-      :render-header="renderHeader"
-      sortable
-      width="150"
-      prop="balance_min"
-      align="center"
-    >
-      <!-- <template #header>
+    <el-table-column sortable width="150" prop="balance_min" align="center">
+      <template #header>
         <div>
           <div>餘額</div>
           <div>最低餘額</div>
         </div>
-      </template> -->
+      </template>
     </el-table-column>
     <el-table-column prop="remark" label="備註" align="center" />
-    <el-table-column sortable width="110" prop="" label="更新人員" align="center" />
-    <el-table-column sortable width="110" prop="" label="更新時間" align="center" />
+    <el-table-column sortable width="110" prop="updataUser" label="更新人員" align="center" />
+    <el-table-column sortable width="110" prop="updateTime" label="更新時間" align="center" />
     <el-table-column width="110" prop="" label="操作" align="center">
       <template #default="scope">
         <el-button class="editBtn2" size="small" @click="openModal(scope.row)"
@@ -213,6 +207,7 @@
 </template>
 
 <script>
+// import { h } from 'vue';
 import _ from 'lodash';
 
 export default {
@@ -225,10 +220,14 @@ export default {
         bankType: '',
         bank_transfer: '', // 銀行轉出顯示
         bank_link: '', // 銀行綁定
-        bankName_options: [], // 銀行類型下拉選項
+        currency: '', // 幣別
+        deposit_status: '', // 收款狀態
+        dispensing_status: '', // 出款狀態
+        currency_options: [], // 幣別下拉選項
+        bankName_options: [], // 銀行名稱下拉選項
         bankType_options: [], // 銀行類型下拉選項
-        bankTransfer_options: [], // 銀行轉出顯示下拉選項
-        bankLink_options: [], // 綁定銀行卡顯示下拉選項
+        depositStatus_options: [], // 收款狀態顯示下拉選項
+        dispensingStatus_options: [], // 出款狀態顯示下拉選項
       },
       //  下方table
       companyList: {
@@ -250,7 +249,6 @@ export default {
         || (columnIndex === 2 && rowIndex === 0)
         || (columnIndex === 4 && rowIndex === 0)
         || (columnIndex === 6 && rowIndex === 0)
-        || (columnIndex === 8 && rowIndex === 0)
         || (columnIndex === 10 && rowIndex === 0)
       ) {
         return 'header_title_dark';
@@ -270,17 +268,6 @@ export default {
       if (!bellValue.includes('.')) bellValue += '.';
       return bellValue.replace(/(\d)(?=(\d{3})+\.)/g, ($0, $1) => `${$1},`).replace(/\.$/, '');
     },
-    // 表頭換行
-    renderHeader(item) {
-      return item('div', {
-        attrs: {
-          class: 'cell',
-        },
-        domProps: {
-          innerHTML: '班级人数</br>(现有学生数/总学生数)',
-        },
-      });
-    },
 
     // 取得提款列表🍳
     getCompany_list() {
@@ -295,19 +282,32 @@ export default {
           if (res.data.code === 200) {
             console.log(res.data.data);
             this.companyList.companyList_table = res.data.data.list;
-            // this.searchOption.bankName_options = res.data.data.list;
-            // this.searchOption.bankType_options = res.data.data.list;
-            // this.searchOption.bankTransfer_options = res.data.data.list;
-            // this.searchOption.bankLink_options = res.data.data.list;
+            this.searchOption.bankName_options = res.data.data.list;
+            this.searchOption.bankType_options = res.data.data.list;
+            this.searchOption.currency_options = res.data.data.list;
+            this.searchOption.bankLink_options = res.data.data.list;
+            this.searchOption.depositStatus_options = res.data.data.list;
+            this.searchOption.dispensingStatus_options = res.data.data.list;
             _.forEach(this.companyList.companyList_table, (item, key) => {
               console.log(item, key);
+            });
+            // 🌭將收款狀態 enable改成啟動
+            _.forEach(this.searchOption.depositStatus_options, (item, key) => {
+              console.log(item, key);
+              if (item.status === 'enable') {
+                return item.status === '啟動';
+              }
+              if (item.status === 'disable') {
+                return item.status === '關閉';
+              }
+              return false;
             });
             // console.log(this.withdrawList.withdrawTable);
 
             // 篩選重複的銀行名
             this.searchOption.bankName_options = _.uniqBy(
               this.searchOption.bankName_options,
-              (item) => item.bank_cn,
+              (item) => item.bank,
             );
             // 篩選重複的銀行類型
             this.searchOption.bankType_options = _.uniqBy(
@@ -317,12 +317,22 @@ export default {
             // 篩選轉出的銀行顯示
             this.searchOption.bankTransfer_options = _.uniqBy(
               this.searchOption.bankTransfer_options,
-              (item) => item.bank,
+              (item) => item.bank_cn,
             );
-            // 篩選綁定的銀行顯示
-            this.searchOption.bankLink_options = _.uniqBy(
-              this.searchOption.bankLink_options,
-              (item) => item.bank,
+            // 篩選轉出的幣別
+            this.searchOption.currency_options = _.uniqBy(
+              this.searchOption.currency_options,
+              (item) => item.currency,
+            );
+            // 篩選收款狀態的銀行顯示
+            this.searchOption.depositStatus_options = _.uniqBy(
+              this.searchOption.depositStatus_options,
+              (item) => item.status,
+            );
+            // 篩選出款狀態的銀行顯示
+            this.searchOption.dispensingStatus_options = _.uniqBy(
+              this.searchOption.dispensingStatus_options,
+              (item) => item.dispensing_status,
             );
           }
         });
@@ -331,6 +341,19 @@ export default {
     resetForm() {
       this.$refs.search_form.resetFields(); // el.form.item裡面的prop一定要不一樣
       this.getBank_list();
+    },
+    // 篩選status
+    filter_status() {
+      _.forEach(this.searchOption.depositStatus_options, (item, key) => {
+        console.log(item.status, key);
+        if (item.status === 'enable') {
+          return item.status === '啟動';
+        }
+        if (item.status === 'disable') {
+          return item.status === '關閉';
+        }
+        return item.status === '關閉';
+      });
     },
   },
   created() {
@@ -409,5 +432,9 @@ export default {
   width: 100%;
   height: 50px;
   object-fit: cover;
+}
+.text-second {
+  background: #575656 !important;
+  color: white;
 }
 </style>
