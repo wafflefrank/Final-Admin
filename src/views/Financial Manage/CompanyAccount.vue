@@ -3,12 +3,134 @@
   <Loading :active="isLoading"></Loading>
   <div class="text-end mb-3">
     <button type="button" class="btn hotSort btn-sm me-3" @click="filter_status()">帳戶紀錄</button>
-    <button type="button" class="btn addBank_btn btn-sm" @click="addBank_visible = true">
+    <button type="button" class="btn addBank_btn btn-sm" @click="addCompany_visible = true">
       新增
     </button>
     <!-- 新增標籤談窗 -->
     <!-- <TagsAdd ref="tagsAddModal"></TagsAdd> -->
   </div>
+  <!-- 新增銀行彈窗 -->
+  <el-dialog v-model="addCompany_visible" title="新增公司出入款帳戶">
+    <el-form
+      ref="addBankRules"
+      :model="addCompany_detail"
+      :rules="addCompany_rules"
+      label-width="120px"
+    >
+      <!-- 第一層 -->
+      <el-row>
+        <el-col :span="8">
+          <!-- 銀行類型 -->
+          <el-form-item label="銀行類型" prop="bank_type" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_type"></el-input>
+          </el-form-item>
+          <!-- 銀行幣別 -->
+          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.currency"></el-input>
+          </el-form-item>
+          <!-- 銀行名稱 -->
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 銀行帳號 -->
+          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 簡中名稱 -->
+          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
+            <el-col :span="11">
+              <el-input v-model="addCompany_detail.bank_cn"></el-input>
+            </el-col>
+          </el-form-item>
+          <!-- 預設語系名稱 -->
+          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_preset"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <!-- 銀行類型 -->
+          <el-form-item label="幣別" prop="bank_type" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_type"></el-input>
+          </el-form-item>
+          <!-- 銀行幣別 -->
+          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.currency"></el-input>
+          </el-form-item>
+          <!-- 銀行名稱 -->
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 銀行帳號 -->
+          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 簡中名稱 -->
+          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
+            <el-col :span="11">
+              <el-input v-model="addCompany_detail.bank_cn"></el-input>
+            </el-col>
+          </el-form-item>
+          <!-- 預設語系名稱 -->
+          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_preset"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <!-- 銀行類型 -->
+          <el-form-item label="縮圖" prop="bank_type" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_type"></el-input>
+          </el-form-item>
+          <!-- 銀行幣別 -->
+          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.currency"></el-input>
+          </el-form-item>
+          <!-- 銀行名稱 -->
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 銀行帳號 -->
+          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank"></el-input>
+          </el-form-item>
+          <!-- 簡中名稱 -->
+          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
+            <el-col :span="11">
+              <el-input v-model="addCompany_detail.bank_cn"></el-input>
+            </el-col>
+          </el-form-item>
+          <!-- 預設語系名稱 -->
+          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.bank_preset"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 第二層 -->
+      <el-row>
+        <el-col :span="24">
+          <!-- 網銀網址 -->
+          <el-form-item label="網銀網址" prop="url" class="bankDetail_style">
+            <el-input v-model="addCompany_detail.url"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click.prevent="resetAddBank_form()"> 重置 </el-button>
+        <el-button @click="addBank_visible = false">取消</el-button>
+        <el-button type="primary" @click="doAddBank()">確認</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <!-- 組設置  上半部分-->
   <el-row>
     <el-col :span="24">
@@ -51,11 +173,11 @@
                     </el-select>
                   </el-form-item>
                   <!-- 幣別 🍖-->
-                  <el-form-item label="幣別" class="companyAccount_style me-2" prop="bankName">
+                  <el-form-item label="幣別" class="companyAccount_style me-2" prop="currency">
                     <el-select
                       v-model="searchOption.currency"
                       placeholder="選擇幣別"
-                      @change="chooseBank_name(searchOption.currency)"
+                      @change="chooseBank_currency(searchOption.currency)"
                     >
                       <el-option
                         v-for="item in searchOption.currency_options"
@@ -69,12 +191,12 @@
                   <el-form-item
                     label="收款狀態"
                     class="companyAccount_style me-2"
-                    prop="bank_transfer"
+                    prop="deposit_status"
                   >
                     <el-select
                       v-model="searchOption.deposit_status"
                       placeholder="選擇狀態"
-                      @change="chooseBank_transfer(searchOption.deposit_status)"
+                      @change="chooseBank_status(searchOption.deposit_status)"
                     >
                       <el-option
                         v-for="item in searchOption.depositStatus_options"
@@ -85,16 +207,20 @@
                     </el-select>
                   </el-form-item>
                   <!-- 出款狀態 🍖 -->
-                  <el-form-item label="出款狀態" class="companyAccount_style me-2" prop="bank_link">
+                  <el-form-item
+                    label="出款狀態"
+                    class="companyAccount_style me-2"
+                    prop="dispensing_status"
+                  >
                     <el-select
-                      v-model="searchOption.bank_link"
+                      v-model="searchOption.dispensing_status"
                       placeholder="選擇狀態"
-                      @change="chooseBank_link(searchOption.bank_link)"
+                      @change="chooseBank_dispensingStatus(searchOption.dispensing_status)"
                     >
                       <el-option
-                        v-for="item in searchOption.bankLink_options"
+                        v-for="item in searchOption.dispensingStatus_options"
                         :key="item.id"
-                        :label="item.bank_preset"
+                        :label="item.dispensing_status"
                         :value="item"
                       ></el-option>
                     </el-select>
@@ -214,6 +340,76 @@ export default {
   data() {
     return {
       isLoading: false, // 轉圈讀條
+      // 新增公司出入款帳戶頁面
+      addCompany_visible: false, // 展開彈窗
+      // 公司出入款帳戶彈窗詳細資料
+      addCompany_detail: {
+        bank_type: '',
+        bank: '',
+        currency: '',
+        account: '',
+        branch: '',
+        bank_address: '',
+        IFSC_code: '',
+        title_cn: '',
+        title_vn: '',
+        title_us: '',
+        remark: '',
+        status: '',
+        freeze: '',
+        vip_level: '',
+        third_card: '',
+        deposit_max_day: '',
+        deposit_max_total: '',
+        deposit_max: '',
+        deposit_min: '',
+        qrcode: '',
+        suggest: '',
+        suggest_amount: '',
+        dispensing_status: '',
+        dispensing_min: '',
+        dispensing_max: '',
+        fee: '',
+        fee2: '',
+      },
+      // 新增公司出入款帳戶規則
+      addCompany_rules: {
+        bank_type: [
+          {
+            required: true,
+            message: '請輸入銀行類型',
+            trigger: 'blur',
+          },
+        ],
+        bank: [
+          {
+            required: true,
+            message: '請輸入銀行名稱',
+            trigger: 'blur',
+          },
+        ],
+        bank_cn: [
+          {
+            required: true,
+            message: '請輸入銀行簡中名稱',
+            trigger: 'blur',
+          },
+        ],
+        bank_preset: [
+          {
+            required: true,
+            message: '請輸入預設語系',
+            trigger: 'blur',
+          },
+        ],
+        url: [
+          {
+            required: true,
+            message: '請輸入網銀網址',
+            trigger: 'blur',
+          },
+        ],
+      },
       // 上方搜尋區間
       searchOption: {
         bankName: '',
@@ -286,22 +482,33 @@ export default {
             this.searchOption.bankType_options = res.data.data.list;
             this.searchOption.currency_options = res.data.data.list;
             this.searchOption.bankLink_options = res.data.data.list;
-            this.searchOption.depositStatus_options = res.data.data.list;
-            this.searchOption.dispensingStatus_options = res.data.data.list;
+            // this.searchOption.depositStatus_options = res.data.data.list;
+            // this.searchOption.dispensingStatus_options = res.data.data.list;
             _.forEach(this.companyList.companyList_table, (item, key) => {
               console.log(item, key);
+              if (item.status === 'enable') {
+                this.searchOption.depositStatus_options.push('啟動');
+              } else if (item.status === 'disable') {
+                this.searchOption.depositStatus_options.push('關閉');
+              }
+              if (item.dispensing_status === 'enable') {
+                this.searchOption.dispensingStatus_options.push('啟動');
+              } else if (item.dispensing_status === 'disable') {
+                this.searchOption.dispensingStatus_options.push('關閉');
+              }
+              return true;
             });
             // 🌭將收款狀態 enable改成啟動
-            _.forEach(this.searchOption.depositStatus_options, (item, key) => {
-              console.log(item, key);
-              if (item.status === 'enable') {
-                return item.status === '啟動';
-              }
-              if (item.status === 'disable') {
-                return item.status === '關閉';
-              }
-              return false;
-            });
+            // _.forEach(this.searchOption.depositStatus_options, (item, key) => {
+            //   console.log(item, key);
+            //   if (item.status === 'enable') {
+            //     return item.status === '啟動';
+            //   }
+            //   if (item.status === 'disable') {
+            //     return item.status === '關閉';
+            //   }
+            //   return false;
+            // });
             // console.log(this.withdrawList.withdrawTable);
 
             // 篩選重複的銀行名
@@ -337,27 +544,118 @@ export default {
           }
         });
     },
+    // 取得(篩選過濾的列表)
+    getCompany_list2() {
+      const testapi = `${process.env.VUE_APP_TESTAPI}`;
+      this.isLoading = true;
+      this.$http
+        .get(
+          `${testapi}/backend/financ/financeAccount?skip=${this.companyList.skip}&limit=${this.companyList.limit}&order=${this.companyList.order}&orderType`,
+        )
+        .then((res) => {
+          this.isLoading = false;
+          if (res.data.code === 200) {
+            console.log(res.data.data);
+            this.companyList.filterTableData = res.data.data.list;
+          }
+        });
+    },
     // 重置搜尋表單
     resetForm() {
       this.$refs.search_form.resetFields(); // el.form.item裡面的prop一定要不一樣
-      this.getBank_list();
+      this.getCompany_list();
     },
-    // 篩選status
-    filter_status() {
-      _.forEach(this.searchOption.depositStatus_options, (item, key) => {
-        console.log(item.status, key);
-        if (item.status === 'enable') {
-          return item.status === '啟動';
-        }
-        if (item.status === 'disable') {
-          return item.status === '關閉';
-        }
-        return item.status === '關閉';
-      });
+    // 搜尋
+    imtScreen() {
+      // 判断是否輸入搜尋欄位
+      if (
+        !this.searchOption.bankType
+        && !this.searchOption.bankName
+        && !this.searchOption.currency
+        && !this.searchOption.deposit_status
+        && !this.searchOption.dispensing_status
+      ) {
+        this.$message({
+          type: 'warning',
+          message: '請選擇搜尋範圍！',
+        });
+        // 依銀行類型搜尋
+      } else if (this.searchOption.bankType !== '') {
+        console.log('抓到銀行類型');
+        this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
+          console.log(item1.bank_type);
+          return item1.bank_type === this.searchOption.bankType;
+        });
+        // 原表格數據  = 篩選後的表格內容
+        // 依銀行名稱搜尋
+      } else if (this.searchOption.bankName !== '') {
+        console.log('抓到銀行名稱');
+        this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
+          console.log(item1.bank);
+          return item1.bank === this.searchOption.bankName;
+        });
+        // 依幣別搜尋
+      } else if (this.searchOption.currency !== '') {
+        console.log('抓到幣別');
+        this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
+          console.log(item1.currency);
+          return item1.currency === this.searchOption.currency;
+        });
+        // 依收款狀態搜尋
+      } else if (this.searchOption.deposit_status !== '') {
+        console.log('抓到收款狀態');
+        this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
+          console.log(item1.status);
+          // this.searchOption.deposit_status = 'enable';
+          if (this.searchOption.deposit_status === '啟動') {
+            return item1.status === 'enable';
+          }
+          return item1.status === 'disable';
+        });
+        // 依出款狀態搜尋
+      } else if (this.searchOption.dispensing_status !== '') {
+        console.log('抓到收款狀態');
+        this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
+          console.log(item1.dispensing_status);
+          // this.searchOption.deposit_status = 'enable';
+          if (this.searchOption.dispensing_status === '啟動') {
+            return item1.dispensing_status === 'enable';
+          }
+          return item1.dispensing_status === 'disable';
+        });
+      } else {
+        console.log('啥都沒跑');
+      }
+    },
+    // 切換選擇的類型
+    chooseBank_type(item) {
+      console.log(item.bank_type);
+      this.searchOption.bankType = item.bank_type;
+    },
+    // 選擇銀行名稱
+    chooseBank_name(item) {
+      console.log(item.bank);
+      this.searchOption.bankName = item.bank;
+    },
+    // 選擇銀行幣別
+    chooseBank_currency(item) {
+      console.log(item.currency);
+      this.searchOption.currency = item.currency;
+    },
+    // 選擇收款狀態
+    chooseBank_status(item) {
+      console.log(item);
+      this.searchOption.deposit_status = item;
+    },
+    // 選擇收款狀態
+    chooseBank_dispensingStatus(item) {
+      console.log(item);
+      this.searchOption.dispensing_status = item;
     },
   },
   created() {
     this.getCompany_list();
+    this.getCompany_list2();
   },
 };
 </script>
