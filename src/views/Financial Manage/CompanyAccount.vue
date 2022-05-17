@@ -3,134 +3,18 @@
   <Loading :active="isLoading"></Loading>
   <div class="text-end mb-3">
     <button type="button" class="btn hotSort btn-sm me-3" @click="filter_status()">帳戶紀錄</button>
-    <button type="button" class="btn addBank_btn btn-sm" @click="addCompany_visible = true">
+    <button
+      type="button"
+      class="btn addBank_btn btn-sm"
+      @click="$refs.addCompany_accountModal.showModal"
+    >
       新增
     </button>
     <!-- 新增標籤談窗 -->
     <!-- <TagsAdd ref="tagsAddModal"></TagsAdd> -->
   </div>
-  <!-- 新增銀行彈窗 -->
-  <el-dialog v-model="addCompany_visible" title="新增公司出入款帳戶">
-    <el-form
-      ref="addBankRules"
-      :model="addCompany_detail"
-      :rules="addCompany_rules"
-      label-width="120px"
-    >
-      <!-- 第一層 -->
-      <el-row>
-        <el-col :span="8">
-          <!-- 銀行類型 -->
-          <el-form-item label="銀行類型" prop="bank_type" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_type"></el-input>
-          </el-form-item>
-          <!-- 銀行幣別 -->
-          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.currency"></el-input>
-          </el-form-item>
-          <!-- 銀行名稱 -->
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 銀行帳號 -->
-          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 簡中名稱 -->
-          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
-            <el-col :span="11">
-              <el-input v-model="addCompany_detail.bank_cn"></el-input>
-            </el-col>
-          </el-form-item>
-          <!-- 預設語系名稱 -->
-          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_preset"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <!-- 銀行類型 -->
-          <el-form-item label="幣別" prop="bank_type" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_type"></el-input>
-          </el-form-item>
-          <!-- 銀行幣別 -->
-          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.currency"></el-input>
-          </el-form-item>
-          <!-- 銀行名稱 -->
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 銀行帳號 -->
-          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 簡中名稱 -->
-          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
-            <el-col :span="11">
-              <el-input v-model="addCompany_detail.bank_cn"></el-input>
-            </el-col>
-          </el-form-item>
-          <!-- 預設語系名稱 -->
-          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_preset"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <!-- 銀行類型 -->
-          <el-form-item label="縮圖" prop="bank_type" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_type"></el-input>
-          </el-form-item>
-          <!-- 銀行幣別 -->
-          <el-form-item label="銀行類型" prop="currency" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.currency"></el-input>
-          </el-form-item>
-          <!-- 銀行名稱 -->
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 銀行帳號 -->
-          <el-form-item label="銀行帳號" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <el-form-item label="銀行名稱" prop="bank" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank"></el-input>
-          </el-form-item>
-          <!-- 簡中名稱 -->
-          <el-form-item label="簡中名稱" prop="bank_cn" class="bankDetail_style">
-            <el-col :span="11">
-              <el-input v-model="addCompany_detail.bank_cn"></el-input>
-            </el-col>
-          </el-form-item>
-          <!-- 預設語系名稱 -->
-          <el-form-item label="預設語系名稱" prop="bank_preset" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.bank_preset"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <!-- 第二層 -->
-      <el-row>
-        <el-col :span="24">
-          <!-- 網銀網址 -->
-          <el-form-item label="網銀網址" prop="url" class="bankDetail_style">
-            <el-input v-model="addCompany_detail.url"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button type="primary" @click.prevent="resetAddBank_form()"> 重置 </el-button>
-        <el-button @click="addBank_visible = false">取消</el-button>
-        <el-button type="primary" @click="doAddBank()">確認</el-button>
-      </span>
-    </template>
-  </el-dialog>
+  <!-- 新增公司帳戶彈窗 -->
+  <CompanyAdd ref="addCompany_accountModal"></CompanyAdd>
   <!-- 組設置  上半部分-->
   <el-row>
     <el-col :span="24">
@@ -335,81 +219,17 @@
 <script>
 // import { h } from 'vue';
 import _ from 'lodash';
+import CompanyAdd from '../../components/OpenModal/FinancialModal/Company_Add.vue';
 
 export default {
+  components: {
+    CompanyAdd,
+  },
   data() {
     return {
       isLoading: false, // 轉圈讀條
       // 新增公司出入款帳戶頁面
       addCompany_visible: false, // 展開彈窗
-      // 公司出入款帳戶彈窗詳細資料
-      addCompany_detail: {
-        bank_type: '',
-        bank: '',
-        currency: '',
-        account: '',
-        branch: '',
-        bank_address: '',
-        IFSC_code: '',
-        title_cn: '',
-        title_vn: '',
-        title_us: '',
-        remark: '',
-        status: '',
-        freeze: '',
-        vip_level: '',
-        third_card: '',
-        deposit_max_day: '',
-        deposit_max_total: '',
-        deposit_max: '',
-        deposit_min: '',
-        qrcode: '',
-        suggest: '',
-        suggest_amount: '',
-        dispensing_status: '',
-        dispensing_min: '',
-        dispensing_max: '',
-        fee: '',
-        fee2: '',
-      },
-      // 新增公司出入款帳戶規則
-      addCompany_rules: {
-        bank_type: [
-          {
-            required: true,
-            message: '請輸入銀行類型',
-            trigger: 'blur',
-          },
-        ],
-        bank: [
-          {
-            required: true,
-            message: '請輸入銀行名稱',
-            trigger: 'blur',
-          },
-        ],
-        bank_cn: [
-          {
-            required: true,
-            message: '請輸入銀行簡中名稱',
-            trigger: 'blur',
-          },
-        ],
-        bank_preset: [
-          {
-            required: true,
-            message: '請輸入預設語系',
-            trigger: 'blur',
-          },
-        ],
-        url: [
-          {
-            required: true,
-            message: '請輸入網銀網址',
-            trigger: 'blur',
-          },
-        ],
-      },
       // 上方搜尋區間
       searchOption: {
         bankName: '',
