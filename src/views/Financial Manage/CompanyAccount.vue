@@ -434,7 +434,7 @@ export default {
         });
         // 依出款狀態搜尋
       } else if (this.searchOption.dispensing_status !== '') {
-        console.log('抓到收款狀態');
+        console.log('抓到出款狀態');
         this.companyList.companyList_table = this.companyList.filterTableData.filter((item1) => {
           console.log(item1.dispensing_status);
           // this.searchOption.deposit_status = 'enable';
