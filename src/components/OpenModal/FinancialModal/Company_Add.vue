@@ -38,8 +38,8 @@
                             v-model="addCompany_detail.bank_type"
                             placeholder="選擇銀行類型"
                           >
-                            <el-option label="銀行" value="Bank"></el-option>
-                            <el-option label="三方" value="Third"></el-option>
+                            <el-option label="銀行" value="銀行"></el-option>
+                            <el-option label="三方" value="三方"></el-option>
                           </el-select>
                         </el-form-item>
                         <!-- 幣別💎 -->
@@ -49,10 +49,10 @@
                             v-model="addCompany_detail.currency"
                             placeholder="選擇幣別"
                           >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
+                            <el-option label="台幣" value="台幣"></el-option>
+                            <el-option label="越南盾" value="越南盾"></el-option>
+                            <el-option label="日幣" value="日幣"></el-option>
+                            <el-option label="美金" value="美金"></el-option>
                           </el-select>
                         </el-form-item>
                         <!-- 縮圖 -->
@@ -98,7 +98,9 @@
                         <el-form-item class="ms-4" label="銀行帳號" prop="account">
                           <el-input
                             class="companyAdd_style"
+                            type="password"
                             v-model="addCompany_detail.account"
+                            show-password
                           ></el-input>
                         </el-form-item>
                         <!-- 銀行分行 -->
@@ -164,7 +166,6 @@
                     <el-row class="mt-3">
                       <!-- 備註 -->
                       <el-col :span="24" class="add_left_style_1">
-                        <!-- IFSC_code 🌭-->
                         <el-form-item label="備註" prop="remark" class="ms-4">
                           <el-input
                             class="companyAdd_style"
@@ -185,7 +186,7 @@
                 <!-- 資料表單 -->
                 <div>
                   <el-form
-                    ref="ruleFormRef3"
+                    ref="ruleFormRef4"
                     :model="addCompany_detail"
                     :rules="addCompany_rules"
                     class="demo-ruleForm"
@@ -202,10 +203,10 @@
                             class="radio-group"
                             @change="changeStatus($event)"
                           >
-                            <el-radio label="啟動" class="radio-no">啟動</el-radio>
-                            <el-radio label="備用">備用</el-radio>
-                            <el-radio label="停用">停用</el-radio>
-                            <el-radio label="關閉">關閉</el-radio>
+                            <el-radio label="啟動" value="enable" class="radio-no">啟動</el-radio>
+                            <el-radio label="備用" value="backup">備用</el-radio>
+                            <el-radio label="停用" value="disable">停用</el-radio>
+                            <el-radio label="關閉" value="close">關閉</el-radio>
                           </el-radio-group>
                         </el-form-item>
                       </el-col>
@@ -213,10 +214,10 @@
                       <el-col :span="12" class="add_left_style_1">
                         <el-form-item class="ms-3 el-form-style" label="凍結" prop="freeze">
                           <el-radio-group
-                            v-model="addCompany_detail.status"
+                            v-model="addCompany_detail.freeze"
                             size="small"
                             class="radio-group"
-                            @change="changeStatus($event)"
+                            @change="changeFreeze_status($event)"
                           >
                             <el-radio label="是">是</el-radio>
                             <el-radio label="否" class="radio-no">否</el-radio>
@@ -229,22 +230,22 @@
                       <!-- Vip 等級 & 允許第三方-->
                       <el-col :span="12" class="add_left_style_1">
                         <!-- Vip等級 🌭-->
-                        <el-form-item label="Vip等級" prop="bank" class="ms-4">
+                        <el-form-item label="Vip等級" prop="vip_level" class="ms-4">
                           <el-select
                             class="companyAdd_style"
-                            v-model="addCompany_detail.currency"
+                            v-model="addCompany_detail.vip_level"
                             placeholder="選擇vip等級"
                           >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
+                            <el-option label="1,3" value="13"></el-option>
+                            <el-option label="1,4" value="14"></el-option>
+                            <el-option label="2,6" value="26"></el-option>
+                            <el-option label="3,4" value="34"></el-option>
                           </el-select>
                         </el-form-item>
                       </el-col>
                       <el-col :span="12" class="add_left_style_1">
                         <!-- 是否允許第三方 🌭-->
-                        <el-form-item label="" prop="bank" class="mt-4 ms-4">
+                        <el-form-item label="" prop="third_card" class="mt-4 ms-4">
                           <el-checkbox v-model="addCompany_detail.third_card"
                             >允許用於第三方銀行卡轉帳</el-checkbox
                           >
@@ -306,7 +307,7 @@
                             v-model="addCompany_detail.suggest"
                             size="small"
                             class="radio-group"
-                            @change="changeStatus($event)"
+                            @change="changeMoney_status($event)"
                           >
                             <el-radio label="關閉" class="radio-no">否</el-radio>
                             <el-radio label="開啟">是</el-radio>
@@ -341,7 +342,7 @@
                 <!-- 資料表單 -->
                 <div>
                   <el-form
-                    ref="ruleFormRef3"
+                    ref="ruleFormRef5"
                     :model="addCompany_detail"
                     :rules="addCompany_rules"
                     class="demo-ruleForm"
@@ -360,7 +361,7 @@
                             v-model="addCompany_detail.dispensing_status"
                             size="small"
                             class="radio-group"
-                            @change="changeStatus($event)"
+                            @change="changeDispensing_status($event)"
                           >
                             <el-radio label="啟動">啟動</el-radio>
                             <el-radio label="停用" class="radio-no">停用</el-radio>
@@ -486,28 +487,28 @@ export default {
           {
             required: true,
             message: '請輸入帳號',
-            trigger: 'true',
+            trigger: 'blur',
           },
         ],
         branch: [
           {
             required: true,
             message: '請輸入分行',
-            trigger: 'true',
+            trigger: 'blur',
           },
         ],
         bank_address: [
           {
             required: true,
             message: '請輸入銀行地址',
-            trigger: 'true',
+            trigger: 'blur',
           },
         ],
         IFSC_code: [
           {
             required: false,
             message: '隨意輸入',
-            trigger: 'false',
+            trigger: 'blur',
           },
         ],
         title_vn: [
@@ -671,6 +672,8 @@ export default {
     // 重置會員表單
     resetForm() {
       this.$refs.ruleFormRef3.resetFields();
+      this.$refs.ruleFormRef4.resetFields();
+      this.$refs.ruleFormRef5.resetFields();
       this.$refs.rankSetting.resetFields();
     },
     // 送出新增會員表單
@@ -690,16 +693,16 @@ export default {
         // ....
         // axios
         this.$http
-          .post(`${testapi}/backend/members/group_add`, this.addRuleForm)
+          .post(`${testapi}/backend/financ/financeAccountAdd`, this.addCompany_detail)
           .then((response) => {
             if (response.data.code === 200) {
               this.$swal.fire('新增成功!', `'${response.data.msg}`, 'success');
               this.modal.hide();
-              this.$router.push('grouplist');
+              this.$router.push('companyaccount');
 
               console.log(response.data);
             } else {
-              this.$swal.fire('註冊失敗', `${response.data.msg}`, 'error');
+              this.$swal.fire('新增失敗', `${response.data.msg}`, 'error');
               console.log(response.data);
             }
           })
@@ -707,18 +710,62 @@ export default {
             console.log(error);
             console.log('新增失敗');
           });
-
+        this.reload();
         return true;
       });
       //   resetForm(); // 把表單重置成預設值
     },
-    // 狀態修改
+    // 收款狀態修改
     changeStatus(item) {
       console.log(item);
+      if (item === '啟動') {
+        this.addCompany_detail.status = '啟動'; // 狀態開啟
+        console.log(this.addCompany_detail.status);
+      } else if (item === '備用') {
+        this.addCompany_detail.status = '備用'; // 狀態關閉
+        console.log(this.addCompany_detail.status);
+      } else if (item === '停用') {
+        this.addCompany_detail.status = '停用'; // 狀態關閉
+        console.log(this.addCompany_detail.status);
+      } else if (item === '關閉') {
+        this.addCompany_detail.status = '關閉'; // 狀態關閉
+        console.log(this.addCompany_detail.status);
+      }
+    },
+    // 凍結狀態修改
+    changeFreeze_status(item) {
+      console.log(item);
       if (item === '是') {
-        this.addCompany_detail.suggest = '開啟'; // 狀態開啟
+        this.addCompany_detail.freeze = '是'; // 狀態開啟
+        console.log(this.addCompany_detail.freeze);
       } else if (item === '否') {
-        this.addCompany_detail.suggest = '關閉'; // 狀態關閉
+        this.addCompany_detail.freeze = '否'; // 狀態關閉
+        console.log(this.addCompany_detail.freeze);
+      }
+    },
+    // 建議金額狀態開啟
+    changeMoney_status(item) {
+      console.log(item);
+      if (item === '是') {
+        this.addCompany_detail.suggest = '是'; // 狀態開啟
+        console.log(this.addCompany_detail.suggest);
+      } else if (item === '否') {
+        this.addCompany_detail.suggest = '否'; // 狀態關閉
+        console.log(this.addCompany_detail.suggest);
+      }
+    },
+    // 出款狀態修改
+    changeDispensing_status(item) {
+      console.log(item);
+      if (item === '啟動') {
+        this.addCompany_detail.dispensing_status = '啟動'; // 狀態開啟
+        console.log(this.addCompany_detail.dispensing_status);
+      } else if (item === '停用') {
+        this.addCompany_detail.dispensing_status = '停用'; // 狀態關閉
+        console.log(this.addCompany_detail.dispensing_status);
+      } else if (item === '關閉') {
+        this.addCompany_detail.dispensing_status = '關閉'; // 狀態關閉
+        console.log(this.addCompany_detail.dispensing_status);
       }
     },
   },
