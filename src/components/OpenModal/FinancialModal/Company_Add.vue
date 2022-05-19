@@ -33,10 +33,14 @@
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 銀行類型 🌭-->
                         <el-form-item label="銀行類型" prop="bank_type" class="ms-4">
-                          <el-input
+                          <el-select
                             class="companyAdd_style"
                             v-model="addCompany_detail.bank_type"
-                          ></el-input>
+                            placeholder="選擇銀行類型"
+                          >
+                            <el-option label="銀行" value="Bank"></el-option>
+                            <el-option label="三方" value="Third"></el-option>
+                          </el-select>
                         </el-form-item>
                         <!-- 幣別💎 -->
                         <el-form-item class="ms-4" label="幣別" prop="currency">
@@ -92,42 +96,24 @@
                         </el-form-item>
                         <!-- 銀行帳號 -->
                         <el-form-item class="ms-4" label="銀行帳號" prop="account">
-                          <el-select
+                          <el-input
                             class="companyAdd_style"
                             v-model="addCompany_detail.account"
-                            placeholder="選擇銀行帳號"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
+                          ></el-input>
                         </el-form-item>
                         <!-- 銀行分行 -->
                         <el-form-item class="ms-4" label="銀行分行" prop="branch">
-                          <el-select
+                          <el-input
                             class="companyAdd_style"
                             v-model="addCompany_detail.branch"
-                            placeholder="選擇銀行分行"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
+                          ></el-input>
                         </el-form-item>
                         <!-- 銀行地址 -->
                         <el-form-item class="ms-4" label="銀行地址" prop="bank_address">
-                          <el-select
+                          <el-input
                             class="companyAdd_style"
                             v-model="addCompany_detail.bank_address"
-                            placeholder="選擇銀行地址"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
+                          ></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -151,35 +137,26 @@
                         <!-- 顯示名稱 🌭-->
                         <el-form-item label="顯示名稱(越南)" prop="title_vn" class="ms-4">
                           <el-input
+                            placeholder="顯示越南文"
                             class="companyAdd_style"
                             v-model="addCompany_detail.title_vn"
                           ></el-input>
                         </el-form-item>
                         <!-- zh-CN -->
                         <el-form-item class="ms-4" label="顯示名稱(簡體)" prop="title_cn">
-                          <el-select
+                          <el-input
+                            placeholder="顯示簡體字"
                             class="companyAdd_style"
                             v-model="addCompany_detail.title_cn"
-                            placeholder="選擇幣別"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
+                          ></el-input>
                         </el-form-item>
                         <!-- en-US -->
                         <el-form-item class="ms-4" label="顯示名稱(英文)" prop="title_us">
-                          <el-select
+                          <el-input
+                            placeholder="顯示英文字"
                             class="companyAdd_style"
                             v-model="addCompany_detail.title_us"
-                            placeholder="選擇幣別"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
+                          ></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -234,7 +211,7 @@
                       </el-col>
                       <!-- 凍結 🌭-->
                       <el-col :span="12" class="add_left_style_1">
-                        <el-form-item class="ms-3 el-form-style" label="凍結" prop="status">
+                        <el-form-item class="ms-3 el-form-style" label="凍結" prop="freeze">
                           <el-radio-group
                             v-model="addCompany_detail.status"
                             size="small"
@@ -324,12 +301,32 @@
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 建議金額 🌭-->
-                        <el-form-item label="建議金額" prop="suggest_amount" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.suggest_amount"
-                          ></el-input>
+                        <el-form-item label="建議金額" prop="suggest" class="ms-4">
+                          <el-radio-group
+                            v-model="addCompany_detail.suggest"
+                            size="small"
+                            class="radio-group"
+                            @change="changeStatus($event)"
+                          >
+                            <el-radio label="關閉" class="radio-no">否</el-radio>
+                            <el-radio label="開啟">是</el-radio>
+                          </el-radio-group>
                         </el-form-item>
+                        <!-- 建議金額-是下拉選單 -->
+                        <div class="d-flex w-75 ms-2">
+                          <el-form-item
+                            v-if="addCompany_detail.suggest === '開啟'"
+                            label="新增金額 :"
+                            class="ms-3"
+                            prop="suggest_amount"
+                          >
+                            <el-input
+                              placeholder="請輸入金額"
+                              class="domain_style me-3"
+                              v-model="addCompany_detail.suggest_amount"
+                            ></el-input>
+                          </el-form-item>
+                        </div>
                       </el-col>
                     </el-row>
                   </el-form>
@@ -354,9 +351,13 @@
                       <!-- 狀態 & 凍結 &  -->
                       <!-- 狀態 🌭-->
                       <el-col :span="24" class="add_left_style_1">
-                        <el-form-item class="ms-3 el-form-style" label="狀態" prop="status">
+                        <el-form-item
+                          class="ms-3 el-form-style"
+                          label="狀態"
+                          prop="dispensing_status"
+                        >
                           <el-radio-group
-                            v-model="addCompany_detail.status"
+                            v-model="addCompany_detail.dispensing_status"
                             size="small"
                             class="radio-group"
                             @change="changeStatus($event)"
@@ -472,17 +473,180 @@ export default {
             trigger: 'blur',
           },
         ],
-        bank_cn: [
+        currency: [
           {
             required: true,
-            message: '請輸入銀行簡中名稱',
+            message: '請選擇幣別',
+            trigger: 'change',
+          },
+        ],
+        // 缺縮圖
+        // 缺帳戶名稱
+        account: [
+          {
+            required: true,
+            message: '請輸入帳號',
+            trigger: 'true',
+          },
+        ],
+        branch: [
+          {
+            required: true,
+            message: '請輸入分行',
+            trigger: 'true',
+          },
+        ],
+        bank_address: [
+          {
+            required: true,
+            message: '請輸入銀行地址',
+            trigger: 'true',
+          },
+        ],
+        IFSC_code: [
+          {
+            required: false,
+            message: '隨意輸入',
+            trigger: 'false',
+          },
+        ],
+        title_vn: [
+          {
+            required: true,
+            message: '請輸入(越南)顯示名稱',
             trigger: 'blur',
           },
         ],
-        bank_preset: [
+        title_cn: [
           {
             required: true,
-            message: '請輸入預設語系',
+            message: '請輸入(簡體)顯示名稱',
+            trigger: 'blur',
+          },
+        ],
+        title_us: [
+          {
+            required: true,
+            message: '請輸入(英文)顯示名稱',
+            trigger: 'blur',
+          },
+        ],
+        remark: [
+          {
+            required: false,
+            message: '隨意輸入',
+            trigger: 'false',
+          },
+        ],
+        status: [
+          {
+            required: true,
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        freeze: [
+          {
+            required: true,
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        vip_level: [
+          {
+            required: true,
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        third_card: [
+          {
+            required: false,
+            message: '隨意勾選',
+            trigger: 'false',
+          },
+        ],
+        deposit_max_day: [
+          {
+            required: true,
+            message: '請輸入單日存款額',
+            trigger: 'blur',
+          },
+        ],
+        deposit_max_total: [
+          {
+            required: true,
+            message: '請輸入累計存款額',
+            trigger: 'blur',
+          },
+        ],
+        deposit_max: [
+          {
+            required: true,
+            message: '請輸入最低存款額',
+            trigger: 'blur',
+          },
+        ],
+        deposit_min: [
+          {
+            required: true,
+            message: '請輸入最高存款額',
+            trigger: 'blur',
+          },
+        ],
+        qrcode: [
+          {
+            required: false,
+            message: '隨意輸入',
+            trigger: 'blur',
+          },
+        ],
+        suggest: [
+          {
+            required: true,
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        suggest_amount: [
+          {
+            required: true,
+            message: '請輸入金額',
+            trigger: 'blur',
+          },
+        ],
+        dispensing_status: [
+          {
+            required: true,
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        dispensing_min: [
+          {
+            required: true,
+            message: '請輸入金額',
+            trigger: 'blur',
+          },
+        ],
+        dispensing_max: [
+          {
+            required: true,
+            message: '請輸入金額',
+            trigger: 'blur',
+          },
+        ],
+        balance_min: [
+          {
+            required: true,
+            message: '請輸入餘額',
+            trigger: 'blur',
+          },
+        ],
+        fee: [
+          {
+            required: true,
+            message: '請輸入手續費',
             trigger: 'blur',
           },
         ],
@@ -548,6 +712,15 @@ export default {
       });
       //   resetForm(); // 把表單重置成預設值
     },
+    // 狀態修改
+    changeStatus(item) {
+      console.log(item);
+      if (item === '是') {
+        this.addCompany_detail.suggest = '開啟'; // 狀態開啟
+      } else if (item === '否') {
+        this.addCompany_detail.suggest = '關閉'; // 狀態關閉
+      }
+    },
   },
   mounted() {
     this.modal = new Modal(this.$refs.modal);
@@ -580,8 +753,19 @@ export default {
   width: 100%;
   padding: 0 30px 0 10px;
   border: 1px solid #dcdfe6;
+
   &:focus {
     border-color: #409eff !important;
+  }
+}
+.el-select-dropdown__item {
+  color: #3d8ed5;
+  font-weight: 700;
+  &:hover {
+    color: white;
+    background: #3d8ed5;
+    transition: 0.5s;
+    font-weight: bold;
   }
 }
 .fee_style .el-input__inner {
