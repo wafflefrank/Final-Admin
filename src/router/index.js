@@ -99,6 +99,16 @@ const routes = [
           module: '公司出入款帳戶',
         },
       },
+      // 第三方支付平台
+      {
+        path: 'thirdpay',
+        name: '第三方支付平台',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/ThirdPay.vue'),
+        meta: {
+          title: '第三方支付平台',
+          module: '第三方支付平台',
+        },
+      },
     ],
   },
   {
