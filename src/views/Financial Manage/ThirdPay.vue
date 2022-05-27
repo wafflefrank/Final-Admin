@@ -4,16 +4,12 @@
   <div class="text-end mb-3">
     <button type="button" class="btn hotSort btn-sm me-3" @click="filter_status()">銀行配置</button>
     <button type="button" class="btn hotSort btn-sm me-3" @click="filter_status()">帳戶紀錄</button>
-    <button
-      type="button"
-      class="btn hotSort btn-sm"
-      @click="$refs.addCompany_accountModal.showModal"
-    >
+    <button type="button" class="btn hotSort btn-sm" @click="$refs.addThirdpay_Modal.showModal">
       新增
     </button>
-    <!-- 新增標籤談窗 -->
-    <!-- <TagsAdd ref="tagsAddModal"></TagsAdd> -->
   </div>
+  <!-- 新增三方支付彈窗 -->
+  <ThirdpayAdd ref="addThirdpay_Modal"></ThirdpayAdd>
   <!-- 組設置  上半部分-->
   <el-row>
     <el-col :span="24">
@@ -26,52 +22,51 @@
               <el-col :span="24" class="add_left_style_1">
                 <div class="d-flex justify-content-between">
                   <!-- 第三方平台🍖 -->
-                  <el-form-item
-                    label="第三方平台"
-                    class="thirdPay_style me-2"
-                    prop="deposit_status"
-                  >
+                  <el-form-item label="第三方平台" class="thirdPay_style me-2" prop="platform">
                     <el-select
-                      v-model="searchOption.deposit_status"
-                      placeholder="選擇狀態"
-                      @change="chooseBank_status(searchOption.deposit_status)"
+                      v-model="searchOption.platform"
+                      placeholder="選擇第三方平台名稱"
+                      @change="chooseThird_platform(searchOption.platform)"
                     >
+                      <el-option label="全部" value="all"></el-option>
                       <el-option
-                        v-for="item in searchOption.depositStatus_options"
+                        v-for="item in searchOption.thirdPlatform_options"
                         :key="item.id"
-                        :label="item.status"
+                        :label="item.platform"
                         :value="item"
                       ></el-option>
                     </el-select>
                   </el-form-item>
-                  <!-- 平台🍖 -->
-                  <el-form-item label="平台" class="thirdPay_style me-2" prop="deposit_status">
+                  <!-- 平台種類🍖 -->
+                  <el-form-item label="平台種類" class="thirdPay_style me-2" prop="platform_type">
                     <el-select
-                      v-model="searchOption.deposit_status"
-                      placeholder="選擇狀態"
-                      @change="chooseBank_status(searchOption.deposit_status)"
+                      v-model="searchOption.platform_type"
+                      placeholder="選擇平台種類"
+                      @change="choosePlatform_type(searchOption.platform_type)"
                     >
+                      <el-option label="全部" value="all"></el-option>
                       <el-option
-                        v-for="item in searchOption.depositStatus_options"
+                        v-for="item in searchOption.platformType_options"
                         :key="item.id"
-                        :label="item.status"
+                        :label="item.platform_type"
                         :value="item"
                       ></el-option>
                     </el-select>
                   </el-form-item>
                   <!-- 支付類型 🍖-->
-                  <el-form-item label="支付類型" class="thirdPay_style me-2" prop="deposit_status">
+                  <el-form-item label="支付類型" class="thirdPay_style me-2" prop="pay_type">
                     <el-select
-                      v-model="searchOption.deposit_status"
-                      placeholder="選擇狀態"
-                      @change="chooseBank_status(searchOption.deposit_status)"
+                      v-model="searchOption.pay_type"
+                      placeholder="選擇類型"
+                      @change="choosePay_type(searchOption.pay_type)"
                     >
-                      <el-option
-                        v-for="item in searchOption.depositStatus_options"
-                        :key="item.id"
-                        :label="item.status"
-                        :value="item"
-                      ></el-option>
+                      <el-option label="全部" value="all"></el-option>
+                      <el-option label="記憶卡" value="memoryCard"></el-option>
+                      <el-option label="網銀掃碼" value="qrCode"></el-option>
+                      <el-option label="MoMo" value="MoMo"></el-option>
+                      <el-option label="Zalo" value="Zalo"></el-option>
+                      <el-option label="Viettel Pay" value="Viettel Pay"></el-option>
+                      <el-option label="刮刮卡" value="letto"></el-option>
                     </el-select>
                   </el-form-item>
                   <!-- 幣別 🍖-->
@@ -79,8 +74,9 @@
                     <el-select
                       v-model="searchOption.currency"
                       placeholder="選擇幣別"
-                      @change="chooseBank_currency(searchOption.currency)"
+                      @change="choose_currency(searchOption.currency)"
                     >
+                      <el-option label="全部" value="all"></el-option>
                       <el-option
                         v-for="item in searchOption.currency_options"
                         :key="item.id"
@@ -90,18 +86,15 @@
                     </el-select>
                   </el-form-item>
                   <!-- 狀態 🍖-->
-                  <el-form-item label="狀態" class="thirdPay_style me-2" prop="currency">
+                  <el-form-item label="收款狀態" class="thirdPay_style me-2" prop="deposit_status">
                     <el-select
-                      v-model="searchOption.currency"
-                      placeholder="選擇幣別"
-                      @change="chooseBank_currency(searchOption.currency)"
+                      v-model="searchOption.deposit_status"
+                      placeholder="選擇狀態"
+                      @change="choose_status(searchOption.deposit_status)"
                     >
-                      <el-option
-                        v-for="item in searchOption.currency_options"
-                        :key="item.id"
-                        :label="item.currency"
-                        :value="item"
-                      ></el-option>
+                      <el-option label="全部" value="all"></el-option>
+                      <el-option label="啟動" value="enable"></el-option>
+                      <el-option label="關閉" value="disable"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
@@ -158,41 +151,59 @@
         </el-tag>
       </template>
     </el-table-column>
-    <!-- <el-table-column prop="bank_type" width="90" label="銀行類型" align="center" />
-    <el-table-column prop="account" width="130" label="帳戶名稱" align="center"> </el-table-column> -->
-    <!-- 收款 -->
     <el-table-column label="支付類型" align="center">
-      <el-table-column prop="vip_level" label="記憶卡" align="center" />
+      <!-- 記憶卡 -->
+      <el-table-column prop="debit_card" label="記憶卡" align="center">
+        <template v-slot="{ row }">
+          <el-tag :type="row.debit_card === '7' ? 'success' : 'danger'">
+            {{ formatgmtUsed(row.debit_card) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <!-- 網銀掃碼 -->
       <el-table-column
-        prop="deposit_max_day"
+        prop="bank_qr"
         label="網銀掃碼"
         width="100"
         align="center"
         class="image_size"
       >
-      </el-table-column>
-      <el-table-column
-        prop="deposit_max_total"
-        width="100"
-        label="MoMo"
-        align="center"
-        :formatter="stateFormat"
-      />
-      <el-table-column prop="status" label="Zalo" align="center">
         <template v-slot="{ row }">
-          <el-tag :type="row.status === 'enable' ? 'success' : 'danger'">
-            {{ '啟動' }}
-          </el-tag>
+          <img
+            class="qrCode_size"
+            src="../../assets/1200px-QRcode_image.svg.png"
+            :alt="row.bank_qr"
+          />
         </template>
       </el-table-column>
-      <el-table-column width="150" prop="status" label="Viettel Pay" align="center">
+      <!-- MoMo -->
+      <el-table-column prop="momo_pay" width="100" label="MoMo" align="center">
         <template v-slot="{ row }">
-          <el-tag :type="row.status === 'enable' ? 'success' : 'danger'">
-            {{ '啟動' }}
-          </el-tag>
+          <img
+            class="qrCode_size"
+            src="../../assets/pwegh6kadcb37kuz0woj.webp"
+            :alt="row.momo_pay"
+          />
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="刮刮卡" align="center">
+      <!-- Zalo -->
+      <el-table-column prop="zalo_pay" label="Zalo" align="center">
+        <template v-slot="{ row }">
+          <img class="zaloPay_size" src="../../assets/ZaloPay_logo.webp" :alt="row.zalo_pay" />
+        </template>
+      </el-table-column>
+      <!-- viettel_pay -->
+      <el-table-column width="150" prop="viettel_pay" label="Viettel Pay" align="center">
+        <template v-slot="{ row }">
+          <img
+            class="viettelPay_size"
+            src="../../assets/Viettel_pay_logo_2019.webp"
+            :alt="row.viettel_pay"
+          />
+        </template>
+      </el-table-column>
+      <!-- 刮刮卡 -->
+      <el-table-column prop="vng_card" label="刮刮卡" align="center">
         <template v-slot="{ row }">
           <el-tag :type="row.status === 'enable' ? 'success' : 'danger'">
             {{ '啟動' }}
@@ -226,8 +237,11 @@
       align="center"
     >
     </el-table-column>
+    <!-- 更新人員 -->
     <el-table-column width="110" prop="Updateuser" label="更新人員" align="center" />
+    <!-- 更新時間  -->
     <el-table-column width="200" prop="Updatetime" label="更新時間" align="center" />
+    <!-- 狀態 -->
     <el-table-column width="110" prop="income_status" label="狀態" align="center">
       <template v-slot="{ row }">
         <el-tag :type="row.income_status === 'enable' ? 'success' : 'danger'">
@@ -247,24 +261,31 @@
 
 <script>
 import _ from 'lodash';
+import ThirdpayAdd from '../../components/OpenModal/FinancialModal/ThirdPay_Add.vue';
 
 export default {
+  components: {
+    ThirdpayAdd,
+  },
   data() {
     return {
       isLoading: false, // 轉圈讀條
       // 上方搜尋區間
       searchOption: {
-        bankName: '',
-        bankType: '',
+        platform: '',
+        platform_type: '',
+        title: '',
+        pay_type: '',
         bank_transfer: '', // 銀行轉出顯示
         bank_link: '', // 銀行綁定
         currency: '', // 幣別
         deposit_status: '', // 收款狀態
         dispensing_status: '', // 出款狀態
         currency_options: [], // 幣別下拉選項
-        bankName_options: [], // 銀行名稱下拉選項
-        bankType_options: [], // 銀行類型下拉選項
-        depositStatus_options: [], // 收款狀態顯示下拉選項
+        thirdPlatform_options: [], // 第三方平台下拉選項
+        platformType_options: [], // 平台下拉選項
+        payType_options: [], // 支付類型下拉選項
+        status_options: [], // 收款狀態顯示下拉選項
         dispensingStatus_options: [], // 出款狀態顯示下拉選項
       },
       //  下方table
@@ -307,7 +328,7 @@ export default {
       if (!bellValue.includes('.')) bellValue += '.';
       return bellValue.replace(/(\d)(?=(\d{3})+\.)/g, ($0, $1) => `${$1},`).replace(/\.$/, '');
     },
-    // 取得提款列表🍳
+    // 取得三方列表🍳
     getThirdPay_list() {
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       this.isLoading = true;
@@ -316,44 +337,21 @@ export default {
         if (res.data.code === 200) {
           console.log(res.data.data);
           this.thirdPay_list.thirdPayList_table = res.data.data.list;
-          // this.searchOption.depositStatus_options = res.data.data.list;
-          // this.searchOption.dispensingStatus_options = res.data.data.list;
-          // _.forEach(this.thirdPay_list.thirdPayList_table, (item, key) => {
-          //   console.log(item, key);
-          //   if (item.status === 'enable') {
-          //     this.searchOption.depositStatus_options.push('啟動');
-          //   } else if (item.status === 'disable') {
-          //     this.searchOption.depositStatus_options.push('關閉');
-          //   }
-          //   if (item.dispensing_status === 'enable') {
-          //     this.searchOption.dispensingStatus_options.push('啟動');
-          //   } else if (item.dispensing_status === 'disable') {
-          //     this.searchOption.dispensingStatus_options.push('關閉');
-          //   }
-          //   return true;
-          // });
-          // 🌭將收款狀態 enable改成啟動
-          // _.forEach(this.searchOption.depositStatus_options, (item, key) => {
-          //   console.log(item, key);
-          //   if (item.status === 'enable') {
-          //     return item.status === '啟動';
-          //   }
-          //   if (item.status === 'disable') {
-          //     return item.status === '關閉';
-          //   }
-          //   return false;
-          // });
-          // console.log(this.withdrawList.withdrawTable);
+          this.searchOption.thirdPlatform_options = res.data.data.list;
+          this.searchOption.platformType_options = res.data.data.list;
+          this.searchOption.payType_options = res.data.data.list;
+          this.searchOption.currency_options = res.data.data.list;
+          this.searchOption.status_options = res.data.data.list;
 
           // 篩選重複的銀行名
-          this.searchOption.bankName_options = _.uniqBy(
-            this.searchOption.bankName_options,
-            (item) => item.bank,
+          this.searchOption.thirdPlatform_options = _.uniqBy(
+            this.searchOption.thirdPlatform_options,
+            (item) => item.platform,
           );
           // 篩選重複的銀行類型
-          this.searchOption.bankType_options = _.uniqBy(
-            this.searchOption.bankType_options,
-            (item) => item.bank_type,
+          this.searchOption.platformType_options = _.uniqBy(
+            this.searchOption.platformType_options,
+            (item) => item.platform_type,
           );
           // 篩選轉出的銀行顯示
           this.searchOption.bankTransfer_options = _.uniqBy(
@@ -378,6 +376,117 @@ export default {
         }
       });
     },
+    // 取得三方列表🍳(篩選過濾的列表)
+    getThirdPay_list2() {
+      const testapi = `${process.env.VUE_APP_TESTAPI}`;
+      this.isLoading = true;
+      this.$http
+        .get(
+          `${testapi}/backend/financ/thirdPlatformSearch?platform=${this.searchOption.platform}&platform_type=${this.searchOption.platform_type}&payType=${this.searchOption.pay_type}&currency=${this.searchOption.currency}&income_status=${this.searchOption.deposit_status}`,
+        )
+        .then((res) => {
+          this.isLoading = false;
+          if (res.data.code === 200) {
+            console.log(res.data.data);
+            this.thirdPay_list.filterTableData = res.data.data;
+            // this.searchOption.depositStatus_options = res.data.data.list;
+            // this.searchOption.dispensingStatus_options = res.data.data.list;
+            // _.forEach(this.thirdPay_list.thirdPayList_table, (item, key) => {
+            //   console.log(item, key);
+            //   if (item.status === 'enable') {
+            //     this.searchOption.depositStatus_options.push('啟動');
+            //   } else if (item.status === 'disable') {
+            //     this.searchOption.depositStatus_options.push('關閉');
+            //   }
+            //   if (item.dispensing_status === 'enable') {
+            //     this.searchOption.dispensingStatus_options.push('啟動');
+            //   } else if (item.dispensing_status === 'disable') {
+            //     this.searchOption.dispensingStatus_options.push('關閉');
+            //   }
+            //   return true;
+            // });
+            // 🌭將收款狀態 enable改成啟動
+            // _.forEach(this.searchOption.depositStatus_options, (item, key) => {
+            //   console.log(item, key);
+            //   if (item.status === 'enable') {
+            //     return item.status === '啟動';
+            //   }
+            //   if (item.status === 'disable') {
+            //     return item.status === '關閉';
+            //   }
+            //   return false;
+            // });
+            // console.log(this.withdrawList.withdrawTable);
+
+            // 篩選重複的銀行名
+            this.searchOption.bankName_options = _.uniqBy(
+              this.searchOption.bankName_options,
+              (item) => item.bank,
+            );
+            // 篩選重複的銀行類型
+            this.searchOption.bankType_options = _.uniqBy(
+              this.searchOption.bankType_options,
+              (item) => item.bank_type,
+            );
+            // 篩選轉出的銀行顯示
+            this.searchOption.bankTransfer_options = _.uniqBy(
+              this.searchOption.bankTransfer_options,
+              (item) => item.bank_cn,
+            );
+            // 篩選轉出的幣別
+            this.searchOption.currency_options = _.uniqBy(
+              this.searchOption.currency_options,
+              (item) => item.currency,
+            );
+            // 篩選收款狀態的銀行顯示
+            this.searchOption.depositStatus_options = _.uniqBy(
+              this.searchOption.depositStatus_options,
+              (item) => item.status,
+            );
+            // 篩選出款狀態的銀行顯示
+            this.searchOption.dispensingStatus_options = _.uniqBy(
+              this.searchOption.dispensingStatus_options,
+              (item) => item.dispensing_status,
+            );
+          }
+        });
+    },
+    // 搜尋
+    imtScreen() {
+      // 判断是否輸入搜尋欄位
+      if (
+        !this.searchOption.platform
+        && !this.searchOption.platform_type
+        && !this.searchOption.pay_type
+        && !this.searchOption.currency
+        && !this.searchOption.deposit_status
+      ) {
+        this.$message({
+          type: 'warning',
+          message: '請選擇搜尋範圍！',
+        });
+      } else {
+        const testapi = `${process.env.VUE_APP_TESTAPI}`;
+        this.isLoading = true;
+        this.$http
+          .get(
+            `${testapi}/backend/financ/thirdPlatformSearch?platform=${this.searchOption.platform}&platform_type=${this.searchOption.platform_type}&payType=${this.searchOption.pay_type}&currency=${this.searchOption.currency}&income_status=${this.searchOption.deposit_status}`,
+          )
+          .then((res) => {
+            this.isLoading = false;
+            if (res.data.code === 200) {
+              console.log(res.data.data);
+              this.thirdPay_list.filterTableData = res.data.data;
+              this.thirdPay_list.thirdPayList_table = this.thirdPay_list.filterTableData;
+            }
+          });
+      }
+    },
+    // 重置搜尋表單
+    resetForm() {
+      this.$refs.search_form.resetFields(); // el.form.item裡面的prop一定要不一樣
+      this.getThirdPay_list();
+    },
     // 過濾狀態
     formatgmtUsed(income_status) {
       if (income_status === 'enable') {
@@ -386,18 +495,75 @@ export default {
       if (income_status === 'disable') {
         return '關閉';
       }
+      if (income_status === '7') {
+        return '7';
+      }
       return '備用';
     },
-    // 過濾第三方名稱
-    // formatThird_Name(platform) {
-    //   if (platform === '123Pay') {
-    //     return '123Pay';
-    //   }
-    //   if (income_status === 'disable') {
-    //     return '關閉';
-    //   }
-    //   return '備用';
-    // },
+    // 第三方平台修改
+    chooseThird_platform(item) {
+      console.log(item);
+      this.searchOption.platform = item.platform;
+      if (item === 'all') {
+        this.searchOption.platform = 'all';
+      }
+    },
+    // 第三方平台修改
+    choosePlatform_type(item) {
+      console.log(item);
+      this.searchOption.platform_type = item.platform_type;
+      if (item === 'all') {
+        this.searchOption.platform_type = 'all';
+      }
+    },
+    // 支付類型修改
+    choosePay_type(item) {
+      console.log(item);
+      this.searchOption.pay_type = item.platform_type;
+      if (item === 'all') {
+        this.searchOption.pay_type = 'all';
+      }
+      if (item === 'memoryCard') {
+        this.searchOption.pay_type = '記憶卡';
+      }
+      if (item === 'qrCode') {
+        this.searchOption.pay_type = '網銀掃碼';
+      }
+      if (item === 'MoMo') {
+        this.searchOption.pay_type = 'MoMo';
+      }
+      if (item === 'Zalo') {
+        this.searchOption.pay_type = 'Zalo';
+      }
+      if (item === 'viettelPay') {
+        this.searchOption.pay_type = 'Viettel Pay';
+      }
+      if (item === 'letto') {
+        this.searchOption.pay_type = '刮刮卡';
+      }
+    },
+    // 第三方平台修改
+    choose_currency(item) {
+      console.log(item);
+      this.searchOption.currency = item.currency;
+      if (item === 'all') {
+        this.searchOption.currency = 'all';
+      }
+    },
+    // 支付類型修改
+    choose_status(item) {
+      console.log(item);
+      this.searchOption.deposit_status = item.deposit_status;
+      if (item === 'all') {
+        this.searchOption.deposit_status = 'all';
+      }
+      if (item === 'enable') {
+        this.searchOption.deposit_status = 'enable';
+      }
+      if (item === 'disable') {
+        this.searchOption.deposit_status = 'disable';
+      }
+    },
   },
   created() {
     this.getThirdPay_list();
@@ -443,5 +609,20 @@ export default {
   background: #888686 !important;
   color: white;
   text-align: center !important;
+}
+.qrCode_size {
+  width: 100%;
+  height: 60px;
+  object-fit: cover;
+}
+.zaloPay_size {
+  width: 50px;
+  height: 53px;
+  // object-fit: cover;
+}
+.viettelPay_size {
+  width: 100%;
+  height: 65px;
+  object-fit: cover;
 }
 </style>
