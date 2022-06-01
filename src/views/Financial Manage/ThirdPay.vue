@@ -484,7 +484,13 @@ export default {
     },
     // 重置搜尋表單
     resetForm() {
-      this.$refs.search_form.resetFields(); // el.form.item裡面的prop一定要不一樣
+      // this.$refs.search_form.resetFields(); // el.form.item裡面的prop一定要不一樣
+      // 重製預設表單為all狀態
+      this.searchOption.platform = 'all';
+      this.searchOption.platform_type = 'all';
+      this.searchOption.pay_type = 'all';
+      this.searchOption.currency = 'all';
+      this.searchOption.deposit_status = 'all';
       this.getThirdPay_list();
     },
     // 過濾狀態

@@ -18,7 +18,7 @@
           <el-row class="mb-4 mt-4">
             <el-col :span="24">
               <div class="bg-dark-light">
-                <h5 class="text-start mb-4 ms-2 mustType text-dark">銀行訊息</h5>
+                <h5 class="text-start mb-4 ms-2 mustType text-dark">第三方資訊</h5>
                 <!-- 資料表單 -->
                 <div>
                   <el-form
@@ -29,6 +29,27 @@
                   >
                     <!-- 第一列 -->
                     <el-row>
+                      <el-col :span="24" class="add_left_style_1">
+                        <!-- 第三方平台 🌭-->
+                        <el-form-item label="第三方平台" prop="bank_type" class="ms-4">
+                          <el-button color="#626aef" plain>昨日</el-button>
+                          <el-button color="#626aef" plain>今日</el-button>
+                          <el-button color="#626aef" plain>本週</el-button>
+                          <el-button color="#626aef" plain>上週</el-button>
+                          <el-button color="#626aef" plain>本月</el-button>
+                          <el-button color="#626aef" plain>上月</el-button>
+                          <el-button color="#626aef" plain>近7天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                          <el-button color="#626aef" plain>近30天</el-button>
+                        </el-form-item>
+                      </el-col>
+
                       <!-- 銀行類型 & 幣別 & 縮圖 -->
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 銀行類型 🌭-->
