@@ -256,52 +256,7 @@
                     </el-row>
                     <!-- 第三列 -->
                     <el-row class="mt-3">
-                      <!-- 單日存款額上限 & 累計存款額上限 & 最低存款額  & 最高存款額  -->
-                      <el-col :span="24" class="add_left_style_1">
-                        <!-- 單日存款額上限 🌭-->
-                        <el-form-item label="單日存款額上限" prop="deposit_max_day" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.deposit_max_day"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 累計存款額上限 🌭-->
-                        <el-form-item label="累計存款額上限" prop="deposit_max_total" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.deposit_max_total"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 最低存款額 🌭-->
-                        <el-form-item label="最低存款額" prop="deposit_max" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.deposit_max"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 最高存款額 🌭-->
-                        <el-form-item label="最高存款額" prop="deposit_min" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.deposit_min"
-                          ></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <!-- 第四列 -->
-                    <el-row class="mt-3">
-                      <el-col :span="24" class="add_left_style_1">
-                        <!-- 二維碼縮圖 🌭-->
-                        <el-form-item label="二維碼縮圖" prop="qrcode" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.qrcode"
-                          ></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <!-- 第五列 -->
-                    <el-row class="mt-3">
+                      <!-- 建議金額  -->
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 建議金額 🌭-->
                         <el-form-item label="建議金額" prop="suggest" class="ms-4">
@@ -330,6 +285,69 @@
                             ></el-input>
                           </el-form-item>
                         </div>
+                      </el-col>
+                    </el-row>
+                    <!-- 第四列 -->
+                    <el-row class="mt-3"> </el-row>
+                    <!-- 第五列 -->
+                    <el-row class="mt-3">
+                      <el-col :span="24" class="add_left_style_1">
+                        <!-- 代付狀態 🌭-->
+                        <el-form-item class="ms-4 el-form-style" label="代付狀態" prop="freeze">
+                          <el-radio-group
+                            v-model="addCompany_detail.freeze"
+                            size="small"
+                            class="radio-group"
+                            @change="changeFreeze_status($event)"
+                          >
+                            <el-radio label="啟用" value="close">啟用</el-radio>
+                            <el-radio label="停用" value="close" class="radio-no">停用</el-radio>
+                          </el-radio-group>
+                        </el-form-item>
+                        <!-- 代付費 -->
+                        <el-form-item label="代付費" prop="fee" class="ms-5">
+                          <div class="d-flex">
+                            <el-input
+                              class="payAnother_style"
+                              v-model="addCompany_detail.fee"
+                            ></el-input>
+                            <span class="ms-2 me-2">%</span> +
+                          </div>
+                        </el-form-item>
+                        <el-form-item label="" prop="fee" class="ms-2">
+                          <el-input
+                            class="payAnother_style"
+                            v-model="addCompany_detail.fee"
+                          ></el-input>
+                        </el-form-item>
+                        <!-- 最低代付額 -->
+                        <el-form-item label="最低代付額" prop="fee" class="ms-5">
+                          <el-input
+                            class="companyAdd_style"
+                            v-model="addCompany_detail.bank"
+                          ></el-input>
+                        </el-form-item>
+                        <!-- 最高代付額 -->
+                        <el-form-item label="最高代付額" prop="fee" class="ms-5">
+                          <el-input
+                            class="companyAdd_style"
+                            v-model="addCompany_detail.bank"
+                          ></el-input>
+                        </el-form-item> </el-col
+                    ></el-row>
+                    <!-- 第六列 -->
+                    <el-row class="mt-3">
+                      <el-col :span="24" class="add_left_style_1">
+                        <el-form-item label="描述" prop="content" class="ms-4">
+                          <el-input
+                            class="remark_style"
+                            type="textarea"
+                            :autosize="{ minRows: 2, maxRows: 8 }"
+                            placeholder="請輸入内容(選填)"
+                            v-model="addCompany_detail.bank"
+                          >
+                          </el-input>
+                        </el-form-item>
                       </el-col>
                     </el-row>
                   </el-form>
@@ -397,10 +415,13 @@
                             v-model="addCompany_detail.balance_min"
                           ></el-input>
                         </el-form-item>
-                        <!-- 手續費 🌭-->
-                        <el-form-item label="手續費" prop="fee" class="ms-4">
+                        <!-- 代付費 🌭-->
+                        <el-form-item label="代付費" prop="fee" class="ms-4">
                           <div class="d-flex">
-                            <el-input class="fee_style" v-model="addCompany_detail.fee"></el-input>
+                            <el-input
+                              class="payAnother_style"
+                              v-model="addCompany_detail.fee"
+                            ></el-input>
                             <span class="ms-2 me-2">%</span> +
                             <span class="ms-2">{{ this.addCompany_detail.fee2 }}</span>
                           </div>
@@ -834,6 +855,15 @@ export default {
     border-color: #409eff !important;
   }
 }
+.remark_style .el-textarea__inner {
+  width: 300px;
+  padding: 0 30px 0 10px;
+  border: 1px solid #dcdfe6;
+
+  &:focus {
+    border-color: #409eff !important;
+  }
+}
 .el-select-dropdown__item {
   color: #3d8ed5;
   font-weight: 700;
@@ -844,8 +874,8 @@ export default {
     font-weight: bold;
   }
 }
-.fee_style .el-input__inner {
-  width: 80px;
+.payAnother_style .el-input__inner {
+  width: 120px;
   padding: 0 10px 0 10px;
   border: 1px solid #dcdfe6;
   &:focus {
