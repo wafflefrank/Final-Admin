@@ -193,6 +193,7 @@
                           <el-select
                             v-model="addCompany_detail.currency"
                             placeholder="選擇幣別"
+                            class="companyAdd_style"
                             @change="choose_currency(addCompany_detail.currency)"
                           >
                             <el-option label="全部" value="all"></el-option>
@@ -288,7 +289,35 @@
                       </el-col>
                     </el-row>
                     <!-- 第四列 -->
-                    <el-row class="mt-3"> </el-row>
+                    <el-row class="mt-3">
+                      <el-col :span="24">
+                        <el-form
+                          ref="payType_set"
+                          :model="payType_set"
+                          :rules="payType_set.botRules"
+                          ><el-table
+                            ref="payType_set"
+                            :data="payType_set.tableData"
+                            style="width: 100%"
+                            :header-cell-class-name="classNameFunc"
+                            class="rank_table_style"
+                          ></el-table>
+                          <!-- 勾選框 -->
+                          <el-table-column label="勾選框" width="80" prop="checkBox">
+                            <template v-slot="scope">
+                              <el-form-item
+                                :prop="`tableData[${scope.$index}].checkBox`"
+                                :rules="payType_set.botRules.checkBox"
+                              >
+                                <el-checkbox v-model="scope.row.checkBox"
+                                  >允許用於第三方銀行卡轉帳</el-checkbox
+                                >
+                              </el-form-item>
+                            </template>
+                          </el-table-column></el-form
+                        ></el-col
+                      ></el-row
+                    >
                     <!-- 第五列 -->
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
@@ -323,6 +352,7 @@
                         <!-- 最低代付額 -->
                         <el-form-item label="最低代付額" prop="fee" class="ms-5">
                           <el-input
+                            placeholder=">=300"
                             class="companyAdd_style"
                             v-model="addCompany_detail.bank"
                           ></el-input>
@@ -330,6 +360,7 @@
                         <!-- 最高代付額 -->
                         <el-form-item label="最高代付額" prop="fee" class="ms-5">
                           <el-input
+                            placeholder="<=200000"
                             class="companyAdd_style"
                             v-model="addCompany_detail.bank"
                           ></el-input>
@@ -507,6 +538,47 @@ export default {
         payment_min: '0.5',
         payment_max: '0.5',
         remark: '0.5',
+      },
+      // 支付類型及設定
+      payType_set: {
+        tableData: [
+          {
+            checkBox: '',
+            payType: 'MoMo',
+          },
+          {
+            checkBox: '',
+            payType: '網銀掃碼',
+          },
+          {
+            checkBox: '',
+            payType: 'Zalo',
+          },
+          {
+            checkBox: '',
+            payType: '借記卡',
+          },
+          {
+            checkBox: '',
+            payType: 'Viettel Pay',
+          },
+        ],
+        botRules: {
+          checkBox: [
+            {
+              required: true,
+              message: '勾選框必須勾選',
+              trigger: 'blur',
+            },
+          ],
+          payType: [
+            {
+              required: true,
+              message: '請填入層級顯示',
+              trigger: 'blur',
+            },
+          ],
+        },
       },
       // 新增公司出入款帳戶規則
       addCompany_rules: {
@@ -718,6 +790,28 @@ export default {
     // 隱藏會員視窗
     hideModal() {
       this.modal.hide();
+    },
+    // 客製欄位樣式
+    classNameFunc({ rowIndex, columnIndex }) {
+      console.log(rowIndex, columnIndex);
+      if (
+        (columnIndex === 0 && rowIndex === 0)
+        || (columnIndex === 2 && rowIndex === 0)
+        || (columnIndex === 4 && rowIndex === 0)
+        || (columnIndex === 6 && rowIndex === 0)
+        || (columnIndex === 8 && rowIndex === 0)
+        || (columnIndex === 10 && rowIndex === 0)
+      ) {
+        return 'header_title_dark';
+      }
+      if (
+        (rowIndex === 1 && columnIndex === 0)
+        || (rowIndex === 1 && columnIndex === 1)
+        || (rowIndex === 2 && columnIndex === 2)
+      ) {
+        return 'header_title_dark';
+      }
+      return 'header_title_light';
     },
     // 重置會員表單
     resetForm() {
