@@ -292,32 +292,86 @@
                     <el-row class="mt-3">
                       <el-col :span="24">
                         <el-form
-                          ref="payType_set"
+                          ref="payType_ref"
                           :model="payType_set"
                           :rules="payType_set.botRules"
-                          ><el-table
-                            ref="payType_set"
+                        >
+                          <el-table
                             :data="payType_set.tableData"
                             style="width: 100%"
                             :header-cell-class-name="classNameFunc"
                             class="rank_table_style"
-                          ></el-table>
-                          <!-- 勾選框 -->
-                          <el-table-column label="勾選框" width="80" prop="checkBox">
-                            <template v-slot="scope">
-                              <el-form-item
-                                :prop="`tableData[${scope.$index}].checkBox`"
-                                :rules="payType_set.botRules.checkBox"
-                              >
-                                <el-checkbox v-model="scope.row.checkBox"
-                                  >允許用於第三方銀行卡轉帳</el-checkbox
+                          >
+                            <!-- 勾選框 -->
+                            <el-table-column
+                              label="勾選框"
+                              width="80"
+                              prop="checkBox"
+                              align="center"
+                            >
+                              <template v-slot="scope">
+                                <el-form-item
+                                  :prop="`tableData[${scope.$index}].checkBox`"
+                                  :rules="payType_set.botRules.checkBox"
                                 >
-                              </el-form-item>
-                            </template>
-                          </el-table-column></el-form
-                        ></el-col
-                      ></el-row
-                    >
+                                  <el-checkbox
+                                    class="botSetStyle"
+                                    v-model="scope.row.checkBoxs"
+                                    @click="testRow(scope)"
+                                  ></el-checkbox>
+                                </el-form-item>
+                              </template>
+                            </el-table-column>
+                            <!-- 支付類型 -->
+                            <el-table-column
+                              label="支付類型"
+                              width="100"
+                              prop="payType"
+                              align="center"
+                            >
+                            </el-table-column>
+                            <!-- 最低存款 -->
+                            <el-table-column
+                              label="最低存款額"
+                              width="150"
+                              prop="checkBox"
+                              align="center"
+                            >
+                              <template v-slot="scope">
+                                <el-form-item
+                                  :prop="`tableData[${scope.$index}].deposit_min`"
+                                  :rules="payType_set.botRules.deposit_min"
+                                >
+                                  <el-input
+                                    class="botSetStyle"
+                                    v-model="scope.row.deposit_min"
+                                    @click="testRow(scope)"
+                                  ></el-input>
+                                </el-form-item>
+                              </template>
+                            </el-table-column>
+                            <!-- 最高存款 -->
+                            <el-table-column
+                              label="最高存款額"
+                              width="150"
+                              prop="checkBox"
+                              align="center"
+                            >
+                              <template v-slot="scope">
+                                <el-form-item
+                                  :prop="`tableData[${scope.$index}].deposit_max`"
+                                  :rules="payType_set.botRules.deposit_max"
+                                >
+                                  <el-input
+                                    class="botSetStyle"
+                                    v-model="scope.row.deposit_max"
+                                    @click="testRow(scope)"
+                                  ></el-input>
+                                </el-form-item>
+                              </template>
+                            </el-table-column>
+                          </el-table> </el-form></el-col
+                    ></el-row>
                     <!-- 第五列 -->
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
@@ -545,22 +599,32 @@ export default {
           {
             checkBox: '',
             payType: 'MoMo',
+            momo_deposit_min: '',
+            momo_deposit_max: '',
           },
           {
             checkBox: '',
             payType: '網銀掃碼',
+            qr_deposit_min: '',
+            qr_deposit_max: '',
           },
           {
             checkBox: '',
             payType: 'Zalo',
+            zalo_deposit_min: '',
+            zalo_deposit_max: '',
           },
           {
             checkBox: '',
             payType: '借記卡',
+            debit_deposit_min: '',
+            debit_deposit_max: '',
           },
           {
             checkBox: '',
             payType: 'Viettel Pay',
+            viettel_deposit_min: '',
+            viettel_deposit_max: '',
           },
         ],
         botRules: {
@@ -911,6 +975,9 @@ export default {
         this.addCompany_detail.dispensing_status = '關閉'; // 狀態關閉
         console.log(this.addCompany_detail.dispensing_status);
       }
+    },
+    testRow(scope) {
+      console.log(scope.row, scope.$index, scope.row.group_id);
     },
   },
   mounted() {
