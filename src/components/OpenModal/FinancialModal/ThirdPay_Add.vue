@@ -334,7 +334,7 @@
                             <el-table-column
                               label="最低存款額"
                               width="150"
-                              prop="checkBox"
+                              prop="deposit_min"
                               align="center"
                             >
                               <template v-slot="scope">
@@ -354,7 +354,7 @@
                             <el-table-column
                               label="最高存款額"
                               width="150"
-                              prop="checkBox"
+                              prop="deposit_max"
                               align="center"
                             >
                               <template v-slot="scope">
@@ -370,15 +370,93 @@
                                 </el-form-item>
                               </template>
                             </el-table-column>
+                            <!-- 玩家手續費 -->
+                            <el-table-column
+                              label="玩家手續費"
+                              width="250"
+                              prop="handfee"
+                              align="center"
+                            >
+                              <template v-slot="scope">
+                                <div class="d-flex">
+                                  <!-- 手續費1 -->
+                                  <el-form-item
+                                    :prop="`tableData[${scope.$index}].handfee`"
+                                    :rules="payType_set.botRules.handfee"
+                                  >
+                                    <div class="d-flex">
+                                      <el-input
+                                        class="botSetStyle"
+                                        v-model="scope.row.handfee"
+                                        @click="testRow(scope)"
+                                      ></el-input>
+                                      <span class="ms-2 me-2">%</span> +
+                                    </div>
+                                  </el-form-item>
+                                  <!-- 手續費2 -->
+                                  <el-form-item
+                                    :prop="`tableData[${scope.$index}].handfee2`"
+                                    :rules="payType_set.botRules.handfee2"
+                                  >
+                                    <el-input
+                                      class="botSetStyle"
+                                      v-model="scope.row.handfee2"
+                                      @click="testRow(scope)"
+                                    ></el-input>
+                                  </el-form-item>
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <!-- 第三方手續費 -->
+                            <el-table-column
+                              label="第三方手續費"
+                              width="250"
+                              prop="thirdfee"
+                              align="center"
+                            >
+                              <template v-slot="scope">
+                                <div class="d-flex">
+                                  <!-- 第三方手續費1 -->
+                                  <el-form-item
+                                    :prop="`tableData[${scope.$index}].thirdfee`"
+                                    :rules="payType_set.botRules.thirdfee"
+                                  >
+                                    <div class="d-flex">
+                                      <el-input
+                                        class="botSetStyle"
+                                        v-model="scope.row.thirdfee"
+                                        @click="testRow(scope)"
+                                      ></el-input>
+                                      <span class="ms-2 me-2">%</span> +
+                                    </div>
+                                  </el-form-item>
+                                  <!-- 第三方手續費2 -->
+                                  <el-form-item
+                                    :prop="`tableData[${scope.$index}].thirdfee2`"
+                                    :rules="payType_set.botRules.thirdfee2"
+                                  >
+                                    <el-input
+                                      class="botSetStyle"
+                                      v-model="scope.row.thirdfee2"
+                                      @click="testRow(scope)"
+                                    ></el-input>
+                                  </el-form-item>
+                                </div>
+                              </template>
+                            </el-table-column>
                           </el-table> </el-form></el-col
                     ></el-row>
                     <!-- 第五列 -->
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 代付狀態 🌭-->
-                        <el-form-item class="ms-4 el-form-style" label="代付狀態" prop="freeze">
+                        <el-form-item
+                          class="ms-4 el-form-style"
+                          label="代付狀態"
+                          prop="payment_status"
+                        >
                           <el-radio-group
-                            v-model="addCompany_detail.freeze"
+                            v-model="addCompany_detail.payment_status"
                             size="small"
                             class="radio-group"
                             @change="changeFreeze_status($event)"
@@ -388,19 +466,19 @@
                           </el-radio-group>
                         </el-form-item>
                         <!-- 代付費 -->
-                        <el-form-item label="代付費" prop="fee" class="ms-5">
+                        <el-form-item label="代付費" prop="payment_cost" class="ms-5">
                           <div class="d-flex">
                             <el-input
                               class="payAnother_style"
-                              v-model="addCompany_detail.fee"
+                              v-model="addCompany_detail.payment_cost"
                             ></el-input>
                             <span class="ms-2 me-2">%</span> +
                           </div>
                         </el-form-item>
-                        <el-form-item label="" prop="fee" class="ms-2">
+                        <el-form-item label="" prop="payment_cost2" class="ms-2">
                           <el-input
                             class="payAnother_style"
-                            v-model="addCompany_detail.fee"
+                            v-model="addCompany_detail.payment_cost2"
                           ></el-input>
                         </el-form-item>
                         <!-- 最低代付額 -->
@@ -423,7 +501,7 @@
                     <!-- 第六列 -->
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
-                        <el-form-item label="描述" prop="content" class="ms-4">
+                        <el-form-item label="備註" prop="content" class="ms-4">
                           <el-input
                             class="remark_style"
                             type="textarea"
@@ -435,89 +513,21 @@
                         </el-form-item>
                       </el-col>
                     </el-row>
-                  </el-form>
-                </div></div
-            ></el-col>
-          </el-row>
-          <!-- 組設置  下半部分-->
-          <el-row class="mb-4 mt-4">
-            <el-col :span="24">
-              <div class="bg-dark-light">
-                <h5 class="text-start mb-4 ms-2 mustType text-dark">出款設定</h5>
-                <!-- 資料表單 -->
-                <div>
-                  <el-form
-                    ref="ruleFormRef5"
-                    :model="addCompany_detail"
-                    :rules="addCompany_rules"
-                    class="demo-ruleForm"
-                  >
-                    <!-- 第一列 -->
-                    <el-row>
-                      <!-- 狀態 & 凍結 &  -->
-                      <!-- 狀態 🌭-->
-                      <el-col :span="24" class="add_left_style_1">
-                        <el-form-item
-                          class="ms-3 el-form-style"
-                          label="狀態"
-                          prop="dispensing_status"
-                        >
-                          <el-radio-group
-                            v-model="addCompany_detail.dispensing_status"
-                            size="small"
-                            class="radio-group"
-                            @change="changeDispensing_status($event)"
-                          >
-                            <el-radio label="啟動">啟動</el-radio>
-                            <el-radio label="停用" class="radio-no">停用</el-radio>
-                            <el-radio label="關閉">關閉</el-radio>
-                          </el-radio-group>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <!-- 第二列 -->
-                    <el-row class="mt-3">
-                      <!-- 最低出款額 & 最高出款額 & 最低餘額 & 手續費-->
-                      <el-col :span="24" class="add_left_style_1">
-                        <!-- 最低出款額 🌭-->
-                        <el-form-item label="最低出款額" prop="dispensing_min" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.dispensing_min"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 最高出款額 🌭-->
-                        <el-form-item label="最高出款額" prop="dispensing_max" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.dispensing_max"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 最低餘額 🌭-->
-                        <el-form-item label="最低餘額" prop="balance_min" class="ms-4">
-                          <el-input
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.balance_min"
-                          ></el-input>
-                        </el-form-item>
-                        <!-- 代付費 🌭-->
-                        <el-form-item label="代付費" prop="fee" class="ms-4">
-                          <div class="d-flex">
-                            <el-input
-                              class="payAnother_style"
-                              v-model="addCompany_detail.fee"
-                            ></el-input>
-                            <span class="ms-2 me-2">%</span> +
-                            <span class="ms-2">{{ this.addCompany_detail.fee2 }}</span>
-                          </div>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
+                    <div class="text-center my-2">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        @click.prevent="resetPayment_set()"
+                      >
+                        重置表單
+                      </button>
+                    </div>
                   </el-form>
                 </div>
               </div></el-col
             >
           </el-row>
+
           <!--層級設置 下半部分  -->
         </div>
         <div class="modal-footer">
@@ -601,30 +611,50 @@ export default {
             payType: 'MoMo',
             momo_deposit_min: '',
             momo_deposit_max: '',
+            momo_handfee: '', // 玩家手續費
+            momo_handfee2: '', // 玩家手續費
+            momo_thirdfee: '', // 第三方手續費
+            momo_thirdfee2: '', // 第三方手續費
           },
           {
             checkBox: '',
             payType: '網銀掃碼',
             qr_deposit_min: '',
             qr_deposit_max: '',
+            qr_handfee: '', // 玩家手續費
+            qr_handfee2: '', // 玩家手續費
+            qr_thirdfee: '', // 第三方手續費
+            qr_thirdfee2: '', // 第三方手續費
           },
           {
             checkBox: '',
             payType: 'Zalo',
             zalo_deposit_min: '',
             zalo_deposit_max: '',
+            zalo_handfee: '', // 玩家手續費
+            zalo_handfee2: '', // 玩家手續費
+            zalo_thirdfee: '', // 第三方手續費
+            zalo_thirdfee2: '', // 第三方手續費
           },
           {
             checkBox: '',
             payType: '借記卡',
             debit_deposit_min: '',
             debit_deposit_max: '',
+            debit_handfee: '', // 玩家手續費
+            debit_handfee2: '', // 玩家手續費
+            debit_thirdfee: '', // 第三方手續費
+            debit_thirdfee2: '', // 第三方手續費
           },
           {
             checkBox: '',
             payType: 'Viettel Pay',
             viettel_deposit_min: '',
             viettel_deposit_max: '',
+            viettel_deposit_handfee: '', // 玩家手續費
+            viettel_deposit_handfee2: '', // 玩家手續費
+            viettel_deposit_thirdfee: '', // 第三方手續費
+            viettel_deposit_thirdfee2: '', // 第三方手續費
           },
         ],
         botRules: {
@@ -639,6 +669,54 @@ export default {
             {
               required: true,
               message: '請填入層級顯示',
+              trigger: 'blur',
+            },
+          ],
+          // 最低存款額
+          deposit_min: [
+            {
+              required: true,
+              message: '最低存款額必須填寫',
+              trigger: 'blur',
+            },
+          ],
+          // 最高存款額
+          deposit_max: [
+            {
+              required: true,
+              message: '最高存款額必須填寫',
+              trigger: 'blur',
+            },
+          ],
+          // 手續費1
+          handfee: [
+            {
+              required: true,
+              message: '手續費1必須填寫',
+              trigger: 'blur',
+            },
+          ],
+          // 手續費2
+          handfee2: [
+            {
+              required: true,
+              message: '手續費2必須填寫',
+              trigger: 'blur',
+            },
+          ],
+          // 第三方手續費1
+          thirdfee: [
+            {
+              required: true,
+              message: '第三方手續費1必須填寫',
+              trigger: 'blur',
+            },
+          ],
+          // 第三方手續費2
+          thirdfee2: [
+            {
+              required: true,
+              message: '第三方手續費2必須填寫',
               trigger: 'blur',
             },
           ],
@@ -880,9 +958,13 @@ export default {
     // 重置會員表單
     resetForm() {
       this.$refs.ruleFormRef3.resetFields();
-      this.$refs.ruleFormRef4.resetFields();
       this.$refs.ruleFormRef5.resetFields();
       this.$refs.rankSetting.resetFields();
+    },
+    // 重置收款設定表單
+    resetPayment_set() {
+      this.$refs.ruleFormRef4.resetFields();
+      this.$refs.payType_ref.resetFields();
     },
     // 送出新增會員表單
     doRegister() {
