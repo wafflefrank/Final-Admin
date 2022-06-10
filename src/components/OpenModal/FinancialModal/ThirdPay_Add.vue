@@ -75,33 +75,25 @@
 
                       <!-- 顯示名稱-->
                       <el-col :span="24" class="add_left_style_1">
-                        <!-- 顯示名稱 🌭-->
-                        <el-form-item label="顯示名稱" prop="bank" class="ms-4">
+                        <!-- title_vn 🌭-->
+                        <el-form-item label="vl-Vn" prop="title_vn" class="ms-4">
                           <el-input
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model="addCompany_detail.title_vn"
                           ></el-input>
                         </el-form-item>
-                        <!-- 帳戶名稱 -->
-                        <el-form-item class="ms-4" label="" prop="">
-                          <el-select
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.branch"
-                            placeholder="選擇帳戶名稱"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
-                        </el-form-item>
-                        <!-- 銀行帳號 -->
-                        <el-form-item class="ms-4" label="" prop="account">
+                        <!-- zh-CN -->
+                        <el-form-item class="ms-4" label="zh-CN" prop="title_cn">
                           <el-input
                             class="companyAdd_style"
-                            type="password"
-                            v-model="addCompany_detail.account"
-                            show-password
+                            v-model="addCompany_detail.title_cn"
+                          ></el-input>
+                        </el-form-item>
+                        <!-- en-US -->
+                        <el-form-item class="ms-4" label="en-US" prop="title">
+                          <el-input
+                            class="companyAdd_style"
+                            v-model="addCompany_detail.title"
                           ></el-input>
                         </el-form-item>
                       </el-col>
@@ -111,39 +103,33 @@
                       <!-- 商戶資料-->
                       <el-col :span="24" class="add_left_style_1">
                         <!-- 商戶編號 🌭-->
-                        <el-form-item label="商戶編號" prop="bank" class="ms-4">
+                        <el-form-item label="商戶編號" prop="merchant_nunber" class="ms-4">
                           <el-input
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model="addCompany_detail.merchant_nunber"
                           ></el-input>
                         </el-form-item>
                         <!-- 商戶密鑰 -->
-                        <el-form-item class="ms-4" label="商戶密鑰" prop="">
-                          <el-select
-                            class="companyAdd_style"
-                            v-model="addCompany_detail.branch"
-                            placeholder="選擇帳戶名稱"
-                          >
-                            <el-option label="台幣" value="TWD"></el-option>
-                            <el-option label="越南盾" value="VND"></el-option>
-                            <el-option label="日幣" value="JPD"></el-option>
-                            <el-option label="美金" value="USD"></el-option>
-                          </el-select>
-                        </el-form-item>
-                        <!-- 存款API網址 -->
-                        <el-form-item class="ms-4" label="存款API網址" prop="account">
+                        <el-form-item class="ms-4" label="商戶密鑰" prop="merchant_key">
                           <el-input
-                            class="companyAdd_style"
                             type="password"
-                            v-model="addCompany_detail.account"
+                            class="companyAdd_style"
+                            v-model="addCompany_detail.merchant_key"
                             show-password
                           ></el-input>
                         </el-form-item>
-                        <!-- 提款API網址 -->
-                        <el-form-item class="ms-4" label="提款API網址" prop="branch">
+                        <!-- 存款API網址 -->
+                        <el-form-item class="ms-4" label="存款API網址" prop="deposit_url">
                           <el-input
                             class="companyAdd_style"
-                            v-model="addCompany_detail.branch"
+                            v-model="addCompany_detail.deposit_url"
+                          ></el-input>
+                        </el-form-item>
+                        <!-- 提款API網址 -->
+                        <el-form-item class="ms-4" label="提款API網址" prop="withdrawal_url">
+                          <el-input
+                            class="companyAdd_style"
+                            v-model="addCompany_detail.withdrawal_url"
                           ></el-input>
                         </el-form-item>
                       </el-col>
@@ -152,16 +138,16 @@
                     <el-row class="mt-3">
                       <!-- 平台 -->
                       <el-col :span="24" class="add_left_style_1">
-                        <el-form-item class="ms-4 el-form-style" label="平台" prop="status">
+                        <el-form-item class="ms-4 el-form-style" label="平台" prop="platform_type">
                           <el-radio-group
-                            v-model="addCompany_detail.status"
+                            v-model="addCompany_detail.platform_type"
                             size="small"
                             class="radio-group"
-                            @change="changeStatus($event)"
+                            @change="changePlatform($event)"
                           >
-                            <el-radio label="全部" value="all" class="radio-no">全部</el-radio>
-                            <el-radio label="手機" value="phone">手機</el-radio>
-                            <el-radio label="桌機" value="desktop">桌機</el-radio>
+                            <el-radio label="all" value="all" class="radio-no">全部</el-radio>
+                            <el-radio label="phone" value="phone">手機</el-radio>
+                            <el-radio label="pc" value="pc">桌機</el-radio>
                           </el-radio-group>
                         </el-form-item>
                       </el-col>
@@ -747,32 +733,40 @@ export default {
         ],
         // 缺縮圖
         // 缺帳戶名稱
-        account: [
+        // 商戶編號
+        merchant_nunber: [
           {
             required: true,
-            message: '請輸入帳號',
+            message: '請輸入商戶編號',
             trigger: 'blur',
           },
         ],
-        branch: [
+        merchant_key: [
           {
             required: true,
-            message: '請輸入分行',
+            message: '請輸入商戶密鑰',
             trigger: 'blur',
           },
         ],
-        bank_address: [
+        deposit_url: [
           {
             required: true,
-            message: '請輸入銀行地址',
+            message: '請輸入存款網址',
             trigger: 'blur',
           },
         ],
-        IFSC_code: [
+        withdrawal_url: [
           {
-            required: false,
-            message: '隨意輸入',
+            required: true,
+            message: '請輸入提款網址',
             trigger: 'blur',
+          },
+        ],
+        platform_type: [
+          {
+            required: true,
+            message: '請至少選擇一項',
+            trigger: 'change',
           },
         ],
         title_vn: [
@@ -789,7 +783,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        title_us: [
+        title: [
           {
             required: true,
             message: '請輸入(英文)顯示名稱',
@@ -958,8 +952,6 @@ export default {
     // 重置會員表單
     resetForm() {
       this.$refs.ruleFormRef3.resetFields();
-      this.$refs.ruleFormRef5.resetFields();
-      this.$refs.rankSetting.resetFields();
     },
     // 重置收款設定表單
     resetPayment_set() {
@@ -983,7 +975,7 @@ export default {
         // ....
         // axios
         this.$http
-          .post(`${testapi}/backend/financ/financeAccountAdd`, this.addCompany_detail)
+          .post(`${testapi}/backend/financ/third_platformAdd`, this.addCompany_detail)
           .then((response) => {
             if (response.data.code === 200) {
               this.$swal.fire('新增成功!', `'${response.data.msg}`, 'success');
@@ -1020,6 +1012,21 @@ export default {
       } else if (item === '關閉') {
         this.addCompany_detail.status = '關閉'; // 狀態關閉
         console.log(this.addCompany_detail.status);
+      }
+    },
+    // 平台狀態更改
+    changePlatform(item) {
+      console.log(item);
+      // this.addCompany_detail.platform_type = item.platform_type;
+      if (item === '全部') {
+        // this.addCompany_detail.platform_type = 'all'; // 狀態開啟
+        console.log(this.addCompany_detail.platform_type);
+      } else if (item === '手機') {
+        this.addCompany_detail.platform_type = item; // 狀態關閉
+        console.log(this.addCompany_detail.platform_type);
+      } else if (item === '桌機') {
+        this.addCompany_detail.platform_type = item; // 狀態關閉
+        console.log(this.addCompany_detail.platform_type);
       }
     },
     // 凍結狀態修改
