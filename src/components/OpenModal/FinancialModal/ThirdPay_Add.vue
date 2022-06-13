@@ -183,27 +183,27 @@
                             @change="choose_currency(addCompany_detail.currency)"
                           >
                             <el-option label="全部" value="all"></el-option>
-                            <el-option
-                              v-for="item in addCompany_detail.currency_options"
-                              :key="item.id"
-                              :label="item.currency"
-                              :value="item"
-                            ></el-option>
+                            <el-option label="越南盾" value="VND"></el-option>
+                            <el-option label="台幣" value="TWD"></el-option>
+                            <el-option label="美金" value="USD"></el-option>
+                            <el-option label="日幣" value="JPY"></el-option>
                           </el-select>
                         </el-form-item>
                       </el-col>
                       <!-- 狀態 🌭-->
                       <el-col :span="12" class="add_left_style_1">
-                        <el-form-item class="ms-3 el-form-style" label="狀態" prop="freeze">
+                        <el-form-item class="ms-3 el-form-style" label="狀態" prop="income_status">
                           <el-radio-group
-                            v-model="addCompany_detail.freeze"
+                            v-model="addCompany_detail.income_status"
                             size="small"
                             class="radio-group"
-                            @change="changeFreeze_status($event)"
+                            @change="changeIncome_status($event)"
                           >
-                            <el-radio label="啟動" value="close">啟動</el-radio>
-                            <el-radio label="備用" value="close" class="radio-no">備用</el-radio>
-                            <el-radio label="停用" value="close" class="radio-no">停用</el-radio>
+                            <el-radio label="enable" value="enable">啟動</el-radio>
+                            <el-radio label="backUp" value="backUp" class="radio-no">備用</el-radio>
+                            <el-radio label="disable" value="disable" class="radio-no"
+                              >停用</el-radio
+                            >
                           </el-radio-group>
                         </el-form-item>
                       </el-col>
@@ -226,17 +226,21 @@
                           </el-select>
                         </el-form-item>
                         <!-- 單日存款額上限 🌭-->
-                        <el-form-item label="單日存款額上限" prop="bank" class="ms-4">
+                        <el-form-item label="單日存款額上限" prop="deposit_limit_day" class="ms-4">
                           <el-input
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model="addCompany_detail.deposit_limit_day"
                           ></el-input>
                         </el-form-item>
                         <!-- 累計存款額上限 🌭-->
-                        <el-form-item label="累計存款額上限" prop="bank" class="ms-4">
+                        <el-form-item
+                          label="累計存款額上限"
+                          prop="deposit_limit_total"
+                          class="ms-4"
+                        >
                           <el-input
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model="addCompany_detail.deposit_limit_total"
                           ></el-input>
                         </el-form-item>
                       </el-col>
@@ -263,12 +267,12 @@
                             v-if="addCompany_detail.suggest === '開啟'"
                             label="新增金額 :"
                             class="ms-3"
-                            prop="suggest_amount"
+                            prop="sug_money"
                           >
                             <el-input
                               placeholder="請輸入金額"
                               class="domain_style me-3"
-                              v-model="addCompany_detail.suggest_amount"
+                              v-model="addCompany_detail.sug_money"
                             ></el-input>
                           </el-form-item>
                         </div>
@@ -445,10 +449,12 @@
                             v-model="addCompany_detail.payment_status"
                             size="small"
                             class="radio-group"
-                            @change="changeFreeze_status($event)"
+                            @change="changePayment_status($event)"
                           >
-                            <el-radio label="啟用" value="close">啟用</el-radio>
-                            <el-radio label="停用" value="close" class="radio-no">停用</el-radio>
+                            <el-radio label="enable" value="enable">啟用</el-radio>
+                            <el-radio label="disable" value="disable" class="radio-no"
+                              >停用</el-radio
+                            >
                           </el-radio-group>
                         </el-form-item>
                         <!-- 代付費 -->
@@ -468,32 +474,32 @@
                           ></el-input>
                         </el-form-item>
                         <!-- 最低代付額 -->
-                        <el-form-item label="最低代付額" prop="fee" class="ms-5">
+                        <el-form-item label="最低代付額" prop="payment_min" class="ms-5">
                           <el-input
                             placeholder=">=300"
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model.number="addCompany_detail.payment_min"
                           ></el-input>
                         </el-form-item>
                         <!-- 最高代付額 -->
-                        <el-form-item label="最高代付額" prop="fee" class="ms-5">
+                        <el-form-item label="最高代付額" prop="payment_max" class="ms-5">
                           <el-input
                             placeholder="<=200000"
                             class="companyAdd_style"
-                            v-model="addCompany_detail.bank"
+                            v-model.number="addCompany_detail.payment_max"
                           ></el-input>
                         </el-form-item> </el-col
                     ></el-row>
                     <!-- 第六列 -->
                     <el-row class="mt-3">
                       <el-col :span="24" class="add_left_style_1">
-                        <el-form-item label="備註" prop="content" class="ms-4">
+                        <el-form-item label="備註" prop="remark" class="ms-4">
                           <el-input
                             class="remark_style"
                             type="textarea"
                             :autosize="{ minRows: 2, maxRows: 8 }"
                             placeholder="請輸入内容(選填)"
-                            v-model="addCompany_detail.bank"
+                            v-model="addCompany_detail.remark"
                           >
                           </el-input>
                         </el-form-item>
@@ -530,6 +536,22 @@ import Modal from 'bootstrap/js/dist/modal';
 
 export default {
   data() {
+    // 驗證最大值
+    const validateMax = (rule, value, callback) => {
+      if (Number.isFinite(value) && value > 200000) {
+        callback(new Error('最低高付額為200000'));
+      } else {
+        callback();
+      }
+    };
+    // 驗證最低值
+    const validateMin = (rule, value, callback) => {
+      if (Number.isFinite(value) && value <= 299) {
+        callback(new Error('最低代付額至少為300'));
+      } else {
+        callback();
+      }
+    };
     return {
       // 公司出入款新增頁彈窗詳細資料
       addCompany_detail: {
@@ -585,9 +607,9 @@ export default {
         payment_status: '',
         payment_cost: '',
         payment_cost2: '',
-        payment_min: '0.5',
-        payment_max: '0.5',
-        remark: '0.5',
+        payment_min: '300',
+        payment_max: '200000',
+        remark: '隨意輸入',
       },
       // 支付類型及設定
       payType_set: {
@@ -804,7 +826,7 @@ export default {
             trigger: 'change',
           },
         ],
-        freeze: [
+        income_status: [
           {
             required: true,
             message: '請至少選擇一種',
@@ -818,45 +840,45 @@ export default {
             trigger: 'change',
           },
         ],
-        third_card: [
-          {
-            required: false,
-            message: '隨意勾選',
-            trigger: 'false',
-          },
-        ],
-        deposit_max_day: [
+        deposit_limit_day: [
           {
             required: true,
-            message: '請輸入單日存款額',
+            message: '請輸入單日存款上限',
             trigger: 'blur',
           },
         ],
-        deposit_max_total: [
+        deposit_limit_total: [
           {
             required: true,
-            message: '請輸入累計存款額',
+            message: '請輸入累計存款上限',
             trigger: 'blur',
           },
         ],
-        deposit_max: [
+        sug_money: [
           {
             required: true,
-            message: '請輸入最低存款額',
+            message: '請輸入建議金額',
             trigger: 'blur',
           },
         ],
-        deposit_min: [
+        payment_status: [
           {
             required: true,
-            message: '請輸入最高存款額',
+            message: '請至少選擇一種',
+            trigger: 'change',
+          },
+        ],
+        payment_cost: [
+          {
+            required: true,
+            message: '請輸入代付費',
             trigger: 'blur',
           },
         ],
-        qrcode: [
+        payment_cost2: [
           {
-            required: false,
-            message: '隨意輸入',
+            required: true,
+            message: '請輸入代付費2',
             trigger: 'blur',
           },
         ],
@@ -870,7 +892,7 @@ export default {
         suggest_amount: [
           {
             required: true,
-            message: '請輸入金額',
+            message: '請輸入建議金額',
             trigger: 'blur',
           },
         ],
@@ -881,39 +903,33 @@ export default {
             trigger: 'change',
           },
         ],
-        dispensing_min: [
+        payment_min: [
           {
+            type: 'number',
             required: true,
-            message: '請輸入金額',
+            message: '請輸入最低代付額',
             trigger: 'blur',
           },
-        ],
-        dispensing_max: [
+          // 驗證2
           {
-            required: true,
-            message: '請輸入金額',
+            type: 'number',
+            message: '最低代付額至少為300',
             trigger: 'blur',
+            validator: validateMin,
           },
         ],
-        balance_min: [
+        payment_max: [
           {
             required: true,
-            message: '請輸入餘額',
+            message: '請輸入最高代付額',
             trigger: 'blur',
           },
-        ],
-        fee: [
+          // 驗證2
           {
-            required: true,
-            message: '請輸入手續費',
+            type: 'number',
+            message: '最低高付額為200000',
             trigger: 'blur',
-          },
-        ],
-        url: [
-          {
-            required: true,
-            message: '請輸入網銀網址',
-            trigger: 'blur',
+            validator: validateMax,
           },
         ],
       },
@@ -1029,15 +1045,49 @@ export default {
         console.log(this.addCompany_detail.platform_type);
       }
     },
-    // 凍結狀態修改
-    changeFreeze_status(item) {
+    // 幣別選擇修改
+    choose_currency(item) {
       console.log(item);
-      if (item === '是') {
-        this.addCompany_detail.freeze = '是'; // 狀態開啟
-        console.log(this.addCompany_detail.freeze);
-      } else if (item === '否') {
-        this.addCompany_detail.freeze = '否'; // 狀態關閉
-        console.log(this.addCompany_detail.freeze);
+      this.addCompany_detail.currency = item.currency;
+      if (item === 'all') {
+        this.addCompany_detail.currency = 'all';
+      }
+      if (item === 'VND') {
+        this.addCompany_detail.currency = '越南盾';
+      }
+      if (item === 'TWD') {
+        this.addCompany_detail.currency = '台幣';
+      }
+      if (item === 'USD') {
+        this.addCompany_detail.currency = '美金';
+      }
+      if (item === 'JPY') {
+        this.addCompany_detail.currency = '日幣';
+      }
+    },
+    // 收款狀態修改
+    changeIncome_status(item) {
+      console.log(item);
+      if (item === '啟動') {
+        this.addCompany_detail.income_status = item; // 狀態開啟
+        console.log(this.addCompany_detail.income_status);
+      } else if (item === '備用') {
+        this.addCompany_detail.income_status = item; // 狀態關閉
+        console.log(this.addCompany_detail.income_status);
+      } else if (item === '停用') {
+        this.addCompany_detail.income_status = item; // 狀態關閉
+        console.log(this.addCompany_detail.income_status);
+      }
+    },
+    // 收款狀態修改
+    changePayment_status(item) {
+      console.log(item);
+      if (item === '啟動') {
+        this.addCompany_detail.income_status = item; // 狀態開啟
+        console.log(this.addCompany_detail.income_status);
+      } else if (item === '停用') {
+        this.addCompany_detail.income_status = item; // 狀態關閉
+        console.log(this.addCompany_detail.income_status);
       }
     },
     // 建議金額狀態開啟
