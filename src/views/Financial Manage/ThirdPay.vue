@@ -264,6 +264,7 @@ import _ from 'lodash';
 import ThirdpayAdd from '../../components/OpenModal/FinancialModal/ThirdPay_Add.vue';
 
 export default {
+  name: 'ThirdPay',
   components: {
     ThirdpayAdd,
   },

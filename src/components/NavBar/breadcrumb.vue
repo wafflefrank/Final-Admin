@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  name: 'breadcrumb',
   data() {
     return {
       breadList: [], // 路由集合

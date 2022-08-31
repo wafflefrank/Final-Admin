@@ -150,6 +150,7 @@
 import Modal from 'bootstrap/js/dist/modal';
 
 export default {
+  name: 'ProductsModal',
   data() {
     //   確認密碼規則
     const checkPwd2 = (rule, value, callback) => {

@@ -535,6 +535,7 @@
 import Modal from 'bootstrap/js/dist/modal';
 
 export default {
+  name: 'ThirdPay_Add',
   data() {
     // 驗證最大值
     const validateMax = (rule, value, callback) => {

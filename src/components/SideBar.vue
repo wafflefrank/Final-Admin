@@ -70,6 +70,7 @@ import {
 } from '@element-plus/icons';
 
 export default defineComponent({
+  name: 'SideBar',
   components: {
     Location,
     Document,

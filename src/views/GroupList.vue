@@ -105,6 +105,7 @@ import GroupListHistory from '../components/OpenModal/GroupList_History.vue';
 import GroupListDetail from '../components/OpenModal/GroupList_Detail.vue';
 
 export default {
+  name: 'GroupList',
   data() {
     return {
       groupDetail: [],

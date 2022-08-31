@@ -88,6 +88,7 @@
 import _ from 'lodash';
 
 export default {
+  name: 'NewPlayer',
   data() {
     return {
       newMember: [],

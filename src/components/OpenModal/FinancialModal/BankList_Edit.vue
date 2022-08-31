@@ -225,6 +225,7 @@ import { ElMessage } from 'element-plus';
 const newImg = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
 
 export default {
+  name: 'BankList_Edit',
   inject: ['reload'],
   props: {
     // 外層傳進來的資料(每次點擊資料都會不同 要寫在watch裡面)

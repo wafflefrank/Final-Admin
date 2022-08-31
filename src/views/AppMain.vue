@@ -26,6 +26,7 @@ import SideBar from '../components/SideBar.vue';
 // import BreadCrumb from '../components/NavBar/breadcrumb.vue';
 
 export default {
+  name: 'AppMain',
   components: {
     SideBar,
     // BreadCrumb,

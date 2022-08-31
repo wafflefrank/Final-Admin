@@ -287,6 +287,7 @@
 import _ from 'lodash';
 
 export default {
+  name: 'WithDraw_History',
   data() {
     return {
       // 上方搜尋區間

@@ -221,6 +221,7 @@ import BankEdit from '../../components/OpenModal/FinancialModal/BankList_Edit.vu
 const fd = new FormData(); // 後台上傳data含有檔案類型 , 自己模擬一個空的數據
 
 export default {
+  name: 'BankList',
   inject: ['reload'],
   components: {
     BankEdit,

@@ -222,6 +222,7 @@ import _ from 'lodash';
 import CompanyAdd from '../../components/OpenModal/FinancialModal/Company_Add.vue';
 
 export default {
+  name: 'CompanyAccount',
   components: {
     CompanyAdd,
   },

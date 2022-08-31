@@ -426,6 +426,7 @@ import Modal from 'bootstrap/js/dist/modal';
 // import { ElMessage } from 'element-plus';
 
 export default {
+  name: 'Company_Add',
   data() {
     return {
       // 公司出入款帳戶彈窗詳細資料

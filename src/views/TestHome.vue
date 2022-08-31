@@ -22,6 +22,7 @@ import leftMenu from '../components/LeftMenu.vue';
 import breadcrumb from '../components/NavBar/breadcrumb.vue';
 
 export default {
+  name: 'TestHome',
   components: {
     leftMenu,
     breadcrumb,

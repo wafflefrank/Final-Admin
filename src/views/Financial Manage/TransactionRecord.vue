@@ -179,6 +179,7 @@ import moment from 'moment';
 import { Search } from '@element-plus/icons';
 
 export default {
+  name: 'TransactionRecord',
   components: {
     Search,
   },

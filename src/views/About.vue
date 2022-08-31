@@ -8,6 +8,7 @@
 import axios from 'axios';
 
 export default {
+  name: 'About',
   // 挂载的时候获取新闻列表
   mounted() {
     axios.get('/mock/testdata').then((res) => {

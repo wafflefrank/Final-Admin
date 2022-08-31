@@ -81,6 +81,7 @@ import { ElMessage } from 'element-plus';
 // import isDark from '~/';
 
 export default {
+  name: 'Tags_Add',
   data() {
     return {
       // 上方標籤表單

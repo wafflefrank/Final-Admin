@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  name: 'FailList',
   data() {
     return {
       failList: [],

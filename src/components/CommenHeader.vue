@@ -38,6 +38,7 @@
 import { Menu, ArrowDown, Avatar } from '@element-plus/icons';
 
 export default {
+  name: 'CommenHeader',
   data() {
     return {
       accountName: '',

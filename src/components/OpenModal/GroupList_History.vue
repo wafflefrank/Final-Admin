@@ -270,6 +270,7 @@ import Modal from 'bootstrap/js/dist/modal';
 // import Color from 'element-plus/es/components/color-picker/src/color';
 
 export default {
+  name: 'GroupList_History',
   data() {
     // 驗證下方表單的輸入值是否為數字
     const validateID = (rule, value, callback) => {

@@ -39,6 +39,7 @@
 
 <script>
 export default {
+  name: 'LeftMenu',
   props: {
     menu: Array,
   },

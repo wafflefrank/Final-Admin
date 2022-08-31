@@ -181,6 +181,7 @@ import Modal from 'bootstrap/js/dist/modal';
 import { Edit } from '@element-plus/icons';
 
 export default {
+  name: 'Tag_Edit',
   props: {
     // 外層傳進來的資料(每次點擊資料都會不同 要寫在watch裡面)
     tagsData: {

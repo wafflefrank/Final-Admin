@@ -471,6 +471,7 @@ import { ElMessage } from 'element-plus';
 // import { UploadFile } from 'element-plus/es/components/upload/src/upload.type';
 
 export default {
+  name: 'MemberDetial',
   props: {
     // 外層傳進來的資料(每次點擊資料都會不同 要寫在watch裡面)
     memberData: {

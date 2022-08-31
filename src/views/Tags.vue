@@ -121,6 +121,7 @@ import TagsAdd from '../components/OpenModal/Tags_Add.vue';
 import TagsEdit from '../components/OpenModal/Tag_Edit.vue';
 
 export default {
+  name: 'Tags',
   components: {
     Search,
     TagsAdd,

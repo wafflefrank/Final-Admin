@@ -55,6 +55,7 @@ import {
 } from '@element-plus/icons';
 
 export default {
+  name: 'Shortcuts',
   data() {
     return {};
   },

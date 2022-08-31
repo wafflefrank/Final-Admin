@@ -107,6 +107,7 @@ import ProductModal from '../components/OpenModal/ProductsModal.vue';
 import MemberDetailModal from '../components/OpenModal/MemberDetial.vue';
 
 export default {
+  name: 'Member',
   data() {
     return {
       small: true, // 分頁樣式大小
