@@ -59,16 +59,6 @@ const routes = [
           module: '個人資訊',
         },
       },
-      // 總交易紀錄
-      {
-        path: 'transationrecord',
-        name: '總交易紀錄',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/TransactionRecord.vue'),
-        meta: {
-          title: '關於測試',
-          module: '個人資訊',
-        },
-      },
       // 提款紀錄
       {
         path: 'withdraw',

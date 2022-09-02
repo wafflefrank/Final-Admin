@@ -32,15 +32,14 @@
 
         <el-sub-menu index="1-2">
           <template #title>財務管理</template>
-          <el-menu-item index="1-2-1" @click="transationrecord()">總交易紀錄</el-menu-item>
-          <el-menu-item index="1-2-2">存款紀錄</el-menu-item>
-          <el-menu-item index="1-2-3" @click="withdrawDetail()">提款紀錄</el-menu-item>
-          <el-menu-item index="1-2-4" @click="failDetail()">提款條件列表</el-menu-item>
-          <el-menu-item index="1-2-5">錢包間出入紀錄</el-menu-item>
-          <el-menu-item index="1-2-6" @click="bankDetail()">銀行列表</el-menu-item>
-          <el-menu-item index="1-2-7" @click="companyAccountDetail()">公司出入款帳戶</el-menu-item>
-          <el-menu-item index="1-2-8" @click="thirdPayDetail()">第三方支付平台</el-menu-item>
-          <el-menu-item index="1-2-9" @click="tagsDetail()">財務設定</el-menu-item>
+          <el-menu-item index="1-2-1">存款紀錄</el-menu-item>
+          <el-menu-item index="1-2-2" @click="withdrawDetail()">提款紀錄</el-menu-item>
+          <el-menu-item index="1-2-3" @click="failDetail()">提款條件列表</el-menu-item>
+          <el-menu-item index="1-2-4">錢包間出入紀錄</el-menu-item>
+          <el-menu-item index="1-2-5" @click="bankDetail()">銀行列表</el-menu-item>
+          <el-menu-item index="1-2-6" @click="companyAccountDetail()">公司出入款帳戶</el-menu-item>
+          <el-menu-item index="1-2-7" @click="thirdPayDetail()">第三方支付平台</el-menu-item>
+          <el-menu-item index="1-2-8" @click="tagsDetail()">財務設定</el-menu-item>
         </el-sub-menu>
 
         <el-menu-item index="1-3">返水管理</el-menu-item>
@@ -167,23 +166,19 @@ export default defineComponent({
       this.$router.push('/tags');
     },
     // 財務管理
-    // 2-1
-    transationrecord() {
-      this.$router.push('/transationrecord');
-    },
-    // 2-3
+    // 2-2
     withdrawDetail() {
       this.$router.push('/withdraw');
     },
-    // 2-6
+    // 2-5
     bankDetail() {
       this.$router.push('/banklist');
     },
-    // 2-7
+    // 2-6
     companyAccountDetail() {
       this.$router.push('/companyaccount');
     },
-    // 2-8
+    // 2-7
     thirdPayDetail() {
       this.$router.push('/thirdpay');
     },
