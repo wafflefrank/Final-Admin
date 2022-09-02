@@ -13,6 +13,7 @@ module.exports = {
     camelcase: 'off',
     'vue/no-deprecated-slot-attribute': 'off',
     'vue/no-unused-vars': 'error',
-    'linebreak-style':0,
+    'linebreak-style': 0,
+    'max-len': ['error', { code: 170 }],
   },
 };

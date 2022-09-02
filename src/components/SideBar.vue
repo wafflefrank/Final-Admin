@@ -25,11 +25,9 @@
           <template #title>會員管理</template>
           <el-menu-item index="1-1-1" @click="memberDetail()">會員列表</el-menu-item>
           <el-menu-item index="1-1-2" @click="newPlayerDetail()">新註冊玩家</el-menu-item>
-          <el-menu-item index="1-1-3">在線會員</el-menu-item>
-          <el-menu-item index="1-1-4" @click="failDetail()">登入失敗名單</el-menu-item>
-          <el-menu-item index="1-1-5">註冊失敗列表</el-menu-item>
-          <el-menu-item index="1-1-6" @click="groupDetail()">組別層級設置</el-menu-item>
-          <el-menu-item index="1-1-7" @click="tagsDetail()">標籤管理</el-menu-item>
+          <el-menu-item index="1-1-3" @click="failDetail()">登入失敗名單</el-menu-item>
+          <el-menu-item index="1-1-4" @click="groupDetail()">組別層級設置</el-menu-item>
+          <el-menu-item index="1-1-5" @click="tagsDetail()">標籤管理</el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="1-2">

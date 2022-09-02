@@ -1186,9 +1186,10 @@ export default {
     },
     // 客製欄位樣式
     classNameFunc({
-      row, column, rowIndex, columnIndex,
+      // row, column, rowIndex, columnIndex,
+      columnIndex,
     }) {
-      console.log(row, column, rowIndex, columnIndex);
+      // console.log(row, column, rowIndex, columnIndex);
       if (columnIndex === 0 || columnIndex === 2 || columnIndex === 4) {
         return 'header_title_dark';
       }
@@ -1202,8 +1203,8 @@ export default {
   },
   created() {
     // this.getUserinfo();
-    console.log(this.tempProduct);
-    console.log(this.bankId);
+    // console.log(this.tempProduct);
+    // console.log(this.bankId);
     // this.getBankCard();
   },
   components: {
