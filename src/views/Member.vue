@@ -56,14 +56,9 @@
       style="margin: 10px 0px"
     ></el-pagination>
   </div>
-
-  <!-- ProductModal 新增會員-->
-  <ProductModal ref="memberModal"></ProductModal>
 </template>
 
 <script>
-import ProductModal from '../components/OpenModal/ProductsModal.vue';
-
 export default {
   name: 'Member',
   data() {
@@ -74,39 +69,18 @@ export default {
       pageSize: 10, // 當前頁顯示多少條
       pageSizeInfo: [10, 20, 30, 50],
       search: '',
-      orderType: 'ASC', // ID排序方式(DESC , ASC )
-      orderBy: '', // 餘額排序( 輸入... money )
       tableData: [],
-      options: [ // 排序方式相關資料
-        {
-          value: 'ascById',
-          label: '依遞增排序ID',
-        },
-        {
-          value: 'descById',
-          label: '依遞減排序ID',
-        },
-        {
-          value: 'descByMoney',
-          label: '依餘額',
-        },
-      ],
-      products: [],
       pagination: [],
-      tempProduct: [],
-      BankCardID: '',
     };
   },
-  components: {
-    ProductModal,
-  },
+  components: {},
   methods: {
     getUserInfo(limit = 20, skip = 0) {
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       this.isLoading = true;
       this.$http
         .get(
-          `${testapi}/backend/members/members?skip=${skip}&limit=${limit}&order=${this.orderType}`,
+          `${testapi}/backend/members/members?skip=${skip}&limit=${limit}`,
         )
         .then((res) => {
           this.isLoading = false;
