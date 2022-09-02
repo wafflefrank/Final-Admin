@@ -59,6 +59,16 @@ const routes = [
           module: '個人資訊',
         },
       },
+      // 充值列表
+      {
+        path: 'rechargelist',
+        name: '充值列表',
+        component: () => import(/* webpackChunkName: "about" */ '../views/RechargeList.vue'),
+        meta: {
+          title: '充值列表頁面',
+          module: '充值列表頁面',
+        },
+      },
       // 提款紀錄
       {
         path: 'withdraw',

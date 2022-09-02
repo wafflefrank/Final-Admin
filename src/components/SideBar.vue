@@ -32,7 +32,7 @@
 
         <el-sub-menu index="1-2">
           <template #title>財務管理</template>
-          <el-menu-item index="1-2-1">存款紀錄</el-menu-item>
+          <el-menu-item index="1-2-1" @click="rechargeList()">充值列表</el-menu-item>
           <el-menu-item index="1-2-2" @click="withdrawDetail()">提款紀錄</el-menu-item>
           <el-menu-item index="1-2-3" @click="failDetail()">提款條件列表</el-menu-item>
           <el-menu-item index="1-2-4">錢包間出入紀錄</el-menu-item>
@@ -166,6 +166,10 @@ export default defineComponent({
       this.$router.push('/tags');
     },
     // 財務管理
+    // 2-1
+    rechargeList() {
+      this.$router.push('/rechargelist');
+    },
     // 2-2
     withdrawDetail() {
       this.$router.push('/withdraw');

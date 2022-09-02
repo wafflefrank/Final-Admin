@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       small: true, // 分頁樣式大小
-      total: 60, // 總共多少頁數
+      total: 0, // 總共多少頁數
       currentPage: 1, // 當前頁數
       pageSize: 10, // 當前頁顯示多少條
       pageSizeInfo: [10, 20, 30, 50],
@@ -75,7 +75,7 @@ export default {
   },
   components: {},
   methods: {
-    getUserInfo(limit = 20, skip = 0) {
+    getUserInfo(limit = 10, skip = 0) {
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       this.isLoading = true;
       this.$http
@@ -86,6 +86,7 @@ export default {
           this.isLoading = false;
           if (res.data.code === 200) {
             this.tableData = res.data.data.list;
+            this.total = res.data.data.total;
           }
         });
     },
