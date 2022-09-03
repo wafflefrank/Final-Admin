@@ -79,6 +79,16 @@ const routes = [
           module: '提領列表頁面',
         },
       },
+      // 分成紀錄
+      {
+        path: 'profitsharing',
+        name: '分成紀錄',
+        component: () => import(/* webpackChunkName: "about" */ '../views/ProfitSharingRecord.vue'),
+        meta: {
+          title: '分成紀錄頁面',
+          module: '分成紀錄頁面',
+        },
+      },
       // 銀行列表
       {
         path: 'banklist',

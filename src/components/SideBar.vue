@@ -34,7 +34,7 @@
           <template #title>財務管理</template>
           <el-menu-item index="1-2-1" @click="rechargeList()">充值列表</el-menu-item>
           <el-menu-item index="1-2-2" @click="withdrawDetail()">提領列表</el-menu-item>
-          <el-menu-item index="1-2-3" @click="failDetail()">提款條件列表</el-menu-item>
+          <el-menu-item index="1-2-3" @click="profitSharingRecord()">分成紀錄</el-menu-item>
           <el-menu-item index="1-2-4">錢包間出入紀錄</el-menu-item>
           <el-menu-item index="1-2-5" @click="bankDetail()">銀行列表</el-menu-item>
           <el-menu-item index="1-2-6" @click="companyAccountDetail()">公司出入款帳戶</el-menu-item>
@@ -173,6 +173,10 @@ export default defineComponent({
     // 2-2
     withdrawDetail() {
       this.$router.push('/withdraw');
+    },
+    //2-3
+    profitSharingRecord() {
+      this.$router.push('/profitsharing');
     },
     // 2-5
     bankDetail() {
