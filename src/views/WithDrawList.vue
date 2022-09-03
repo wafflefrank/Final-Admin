@@ -64,9 +64,18 @@
       <el-table-column prop="order_no" sortable label="單號"/>
       <el-table-column prop="currency" sortable label="幣別"/>
       <el-table-column prop="amount" sortable label="金額" :formatter="stateFormat"/>
-      <el-table-column prop="status" sortable label="狀態"/>
       <el-table-column prop="fee" sortable label="手續費" :formatter="stateFormat"/>
+      <el-table-column prop="status" sortable label="狀態"/>
+      <el-table-column prop="rejectMsg" sortable label="駁回理由"/>
       <el-table-column prop="to_address" sortable label="錢包位置"/>
+    </el-table-column>
+    <el-table-column label="操作">
+      <template #default="scope">
+        <div v-if="scope.row.status === '未審核'">
+          <el-button size="small" type="primary" @click="verifyRecharge(scope.row, 'verify')">審核</el-button>
+          <el-button size="small" type="warning" @click="verifyRecharge(scope.row, 'reject')">駁回</el-button>
+        </div>
+      </template>
     </el-table-column>
   </el-table>
   <!-- 分頁套件 -->
@@ -85,6 +94,33 @@
       style="margin: 10px 0px"
     ></el-pagination>
   </div>
+  <!-- 確認彈窗 -->
+  <el-dialog v-model="modalShow" title="確認" width="60%" center>
+    <div class="text-center justify-content-between pb-2">{{modalMessage}}</div>
+    <template v-if="modalType === 'reject'">
+      <el-form>
+        <el-form-item label="駁回理由">
+          <el-input
+            v-model="modalRejectMessage"
+            placeholder="請輸入理由"
+          />
+        </el-form-item>
+      </el-form>
+      <el-row class="justify-content-between">
+        <el-button type="primary" round @click="setRejectMessage('駁回理由1')">駁回理由1</el-button>
+        <el-button type="primary" round @click="setRejectMessage('駁回理由2')">駁回理由2</el-button>
+        <el-button type="primary" round @click="setRejectMessage('駁回理由3')">駁回理由3</el-button>
+        <el-button type="primary" round @click="setRejectMessage('駁回理由4')">駁回理由4</el-button>
+        <el-button type="primary" round @click="setRejectMessage('駁回理由5')">駁回理由5</el-button>
+      </el-row>
+    </template>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="modalShow = false">取消</el-button>
+        <el-button type="primary" @click="updateRecharge()">確認</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -92,6 +128,11 @@ export default {
   name: 'WithDrawList',
   data() {
     return {
+      modalShow: false, // 彈窗顯示
+      modalType: 'verify',
+      modalId: 0,
+      modalMessage: '確認是否駁回',
+      modalRejectMessage: '',
       small: true, // 分頁樣式大小
       total: 0, // 總共多少頁數
       currentPage: 1, // 當前頁數
@@ -188,6 +229,51 @@ export default {
       };
 
       this.getRechargeList();
+    },
+    verifyRecharge(data, type) {
+      this.modalType = type;
+      this.modalRejectMessage = '';
+      this.modalId = data.id;
+
+      if (type === 'verify') {
+        this.modalMessage = '確認是否審核';
+      } else {
+        this.modalMessage = '確認是否駁回';
+      }
+
+      this.modalShow = true;
+    },
+    updateRecharge() {
+      this.modalShow = false;
+      const testapi = `${process.env.VUE_APP_TESTAPI}`;
+      const formData = {
+        id: this.modalId,
+        status: (this.modalType === 'verify') ? 1 : 9,
+        msg: (this.modalType === 'verify') ? '' : this.modalRejectMessage,
+      };
+
+      this.$http
+        .post(
+          `${testapi}/backend/order/withdrawUpdate`, formData,
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            this.getRechargeList();
+            this.$message({
+              type: 'success',
+              message: '執行成功',
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'error',
+            message: '執行失敗',
+          });
+        });
+    },
+    setRejectMessage(message) {
+      this.modalRejectMessage = message;
     },
   },
   created() {

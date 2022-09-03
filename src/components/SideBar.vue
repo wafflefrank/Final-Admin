@@ -42,11 +42,13 @@
           <el-menu-item index="1-2-8" @click="tagsDetail()">財務設定</el-menu-item>
         </el-sub-menu>
 
-        <el-menu-item index="1-3">返水管理</el-menu-item>
-        <el-sub-menu index="1-4">
-          <template #title>item four</template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
+        <el-sub-menu index="1-3">
+          <template #title>頁面管理</template>
+          <el-menu-item index="1-3-1">最新消息</el-menu-item>
+          <el-menu-item index="1-3-2">輪播畫面</el-menu-item>
         </el-sub-menu>
+
+        <el-menu-item index="1-4">返水管理</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
     <el-menu-item index="3" disabled>
@@ -174,7 +176,7 @@ export default defineComponent({
     withdrawDetail() {
       this.$router.push('/withdraw');
     },
-    //2-3
+    // 2-3
     profitSharingRecord() {
       this.$router.push('/profitsharing');
     },
