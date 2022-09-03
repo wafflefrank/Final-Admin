@@ -64,9 +64,8 @@
       <el-table-column prop="order_no" sortable label="單號"/>
       <el-table-column prop="currency" sortable label="幣別"/>
       <el-table-column prop="amount" sortable label="金額" :formatter="stateFormat"/>
-      <el-table-column prop="endTime" sortable label="最後充值時間"/>
       <el-table-column prop="status" sortable label="狀態"/>
-      <el-table-column prop="pay_amount" sortable label="實際充值金額" :formatter="stateFormat"/>
+      <el-table-column prop="fee" sortable label="手續費" :formatter="stateFormat"/>
       <el-table-column prop="to_address" sortable label="錢包位置"/>
     </el-table-column>
   </el-table>
@@ -90,7 +89,7 @@
 
 <script>
 export default {
-  name: 'RechargeList',
+  name: 'WithDrawList',
   data() {
     return {
       small: true, // 分頁樣式大小
@@ -127,7 +126,7 @@ export default {
       const testapi = `${process.env.VUE_APP_TESTAPI}`;
       this.isLoading = true;
 
-      let url = `${testapi}/backend/order/deposit?skip=${skip}&limit=${limit}`;
+      let url = `${testapi}/backend/order/withdraw?skip=${skip}&limit=${limit}`;
 
       if (searchType === 'search') {
         this.currentPage = 1;

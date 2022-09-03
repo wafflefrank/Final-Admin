@@ -69,14 +69,14 @@ const routes = [
           module: '充值列表頁面',
         },
       },
-      // 提款紀錄
+      // 提領列表
       {
         path: 'withdraw',
-        name: '提款紀錄',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/WithDraw_History.vue'),
+        name: '提領列表',
+        component: () => import(/* webpackChunkName: "about" */ '../views/WithDrawList.vue'),
         meta: {
-          title: '提款記錄頁面',
-          module: '提款記錄頁面',
+          title: '提領列表頁面',
+          module: '提領列表頁面',
         },
       },
       // 銀行列表
