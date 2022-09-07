@@ -15,47 +15,11 @@ const routes = [
         meta: { title: '首頁' },
       },
       {
-        path: 'newplayer',
-        name: '新註冊玩家',
-        component: () => import(/* webpackChunkName: "about" */ '../views/NewPlayer.vue'),
-        meta: {
-          title: '關於測試',
-          module: '個人資訊',
-        },
-      },
-      {
         path: 'memberlist',
         name: '會員列表',
         component: () => import(/* webpackChunkName: "about" */ '../views/Member.vue'),
         meta: {
           title: '在線會員',
-          module: '個人資訊',
-        },
-      },
-      {
-        path: 'faillist',
-        name: '登入失敗名單',
-        component: () => import(/* webpackChunkName: "about" */ '../views/FailList.vue'),
-        meta: {
-          title: '登入失敗名單',
-          module: '個人資訊',
-        },
-      },
-      {
-        path: 'grouplist',
-        name: '組別層級設置',
-        component: () => import(/* webpackChunkName: "about" */ '../views/GroupList.vue'),
-        meta: {
-          title: '組別層級設置',
-          module: '個人資訊',
-        },
-      },
-      {
-        path: 'tags',
-        name: '標籤管理',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Tags.vue'),
-        meta: {
-          title: '標籤管理',
           module: '個人資訊',
         },
       },
@@ -87,36 +51,6 @@ const routes = [
         meta: {
           title: '分成紀錄頁面',
           module: '分成紀錄頁面',
-        },
-      },
-      // 銀行列表
-      {
-        path: 'banklist',
-        name: '銀行列表',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/BankList.vue'),
-        meta: {
-          title: '銀行列表',
-          module: '銀行列表',
-        },
-      },
-      // 公司出入款帳戶
-      {
-        path: 'companyaccount',
-        name: '公司出入款帳戶',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/CompanyAccount.vue'),
-        meta: {
-          title: '公司出入款帳戶',
-          module: '公司出入款帳戶',
-        },
-      },
-      // 第三方支付平台
-      {
-        path: 'thirdpay',
-        name: '第三方支付平台',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Financial Manage/ThirdPay.vue'),
-        meta: {
-          title: '第三方支付平台',
-          module: '第三方支付平台',
         },
       },
     ],

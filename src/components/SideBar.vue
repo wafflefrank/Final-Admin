@@ -24,55 +24,32 @@
         <el-sub-menu index="1-1">
           <template #title>會員管理</template>
           <el-menu-item index="1-1-1" @click="memberDetail()">會員列表</el-menu-item>
-          <el-menu-item index="1-1-2" @click="newPlayerDetail()">新註冊玩家</el-menu-item>
-          <el-menu-item index="1-1-3" @click="failDetail()">登入失敗名單</el-menu-item>
-          <el-menu-item index="1-1-4" @click="groupDetail()">組別層級設置</el-menu-item>
-          <el-menu-item index="1-1-5" @click="tagsDetail()">標籤管理</el-menu-item>
         </el-sub-menu>
-
         <el-sub-menu index="1-2">
           <template #title>財務管理</template>
           <el-menu-item index="1-2-1" @click="rechargeList()">充值列表</el-menu-item>
           <el-menu-item index="1-2-2" @click="withdrawDetail()">提領列表</el-menu-item>
           <el-menu-item index="1-2-3" @click="profitSharingRecord()">分成紀錄</el-menu-item>
-          <el-menu-item index="1-2-4">錢包間出入紀錄</el-menu-item>
-          <el-menu-item index="1-2-5" @click="bankDetail()">銀行列表</el-menu-item>
-          <el-menu-item index="1-2-6" @click="companyAccountDetail()">公司出入款帳戶</el-menu-item>
-          <el-menu-item index="1-2-7" @click="thirdPayDetail()">第三方支付平台</el-menu-item>
-          <el-menu-item index="1-2-8" @click="tagsDetail()">財務設定</el-menu-item>
         </el-sub-menu>
-
         <el-sub-menu index="1-3">
           <template #title>頁面管理</template>
           <el-menu-item index="1-3-1">最新消息</el-menu-item>
         </el-sub-menu>
-
-        <el-menu-item index="1-4">返水管理</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
-    <el-menu-item index="3" disabled>
-      <el-icon><document /></el-icon>
-      <span>Navigator Three</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon><setting /></el-icon>
-      <span @click="chatRoom()">即時聊天室</span>
-    </el-menu-item>
   </el-menu>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 import {
-  Location, Document, Menu as IconMenu, Setting,
+  Location, Menu as IconMenu,
 } from '@element-plus/icons';
 
 export default defineComponent({
   name: 'SideBar',
   components: {
     Location,
-    Document,
-    Setting,
     IconMenu,
   },
   setup() {
@@ -148,25 +125,12 @@ export default defineComponent({
     homePage() {
       this.$router.push('/');
     },
-    newPlayerDetail() {
-      this.$router.push('/newplayer');
-    },
-    failDetail() {
-      this.$router.push('/faillist');
-    },
-    groupDetail() {
-      this.$router.push('/grouplist');
-    },
     memberDetail() {
       this.$router.push('/memberlist');
     },
     moneyDetail() {
       this.$router.push('/main/money');
     },
-    tagsDetail() {
-      this.$router.push('/tags');
-    },
-    // 財務管理
     // 2-1
     rechargeList() {
       this.$router.push('/rechargelist');
@@ -178,21 +142,6 @@ export default defineComponent({
     // 2-3
     profitSharingRecord() {
       this.$router.push('/profitsharing');
-    },
-    // 2-5
-    bankDetail() {
-      this.$router.push('/banklist');
-    },
-    // 2-6
-    companyAccountDetail() {
-      this.$router.push('/companyaccount');
-    },
-    // 2-7
-    thirdPayDetail() {
-      this.$router.push('/thirdpay');
-    },
-    chatRoom() {
-      this.$router.push('/chatroom');
     },
   },
 });
