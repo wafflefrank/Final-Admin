@@ -53,6 +53,16 @@ const routes = [
           module: '分成紀錄頁面',
         },
       },
+      // 最新消息
+      {
+        path: 'news',
+        name: '最新消息',
+        component: () => import(/* webpackChunkName: "about" */ '../views/News.vue'),
+        meta: {
+          title: '最新消息頁面',
+          module: '最新消息頁面',
+        },
+      },
     ],
   },
   {
