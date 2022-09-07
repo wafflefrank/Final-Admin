@@ -58,13 +58,13 @@
   >
     <el-table-column label="會員訊息">
       <el-table-column prop="account" sortable label="會員帳號"/>
-      <el-table-column prop="createTime" sortable label="註冊時間"/>
+      <el-table-column prop="createTime" sortable label="註冊時間" :formatter="timeFormat"/>
     </el-table-column>
     <el-table-column label="充值訊息">
       <el-table-column prop="order_no" sortable label="單號"/>
       <el-table-column prop="currency" sortable label="幣別"/>
       <el-table-column prop="amount" sortable label="金額" :formatter="stateFormat"/>
-      <el-table-column prop="endTime" sortable label="最後充值時間"/>
+      <el-table-column prop="endTime" sortable label="最後充值時間" :formatter="timeFormat"/>
       <el-table-column prop="status" sortable label="狀態"/>
       <el-table-column prop="pay_amount" sortable label="實際充值金額" :formatter="stateFormat"/>
       <el-table-column prop="to_address" sortable label="錢包位置"/>
@@ -89,6 +89,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'RechargeList',
   data() {
@@ -180,6 +182,9 @@ export default {
       }
 
       return 0;
+    },
+    timeFormat(row, column, cellValue) {
+      return moment(cellValue).format('lll');
     },
     resetForm() {
       this.searchInfo = {

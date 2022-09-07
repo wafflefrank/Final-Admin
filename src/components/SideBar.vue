@@ -45,7 +45,6 @@
         <el-sub-menu index="1-3">
           <template #title>頁面管理</template>
           <el-menu-item index="1-3-1">最新消息</el-menu-item>
-          <el-menu-item index="1-3-2">輪播畫面</el-menu-item>
         </el-sub-menu>
 
         <el-menu-item index="1-4">返水管理</el-menu-item>

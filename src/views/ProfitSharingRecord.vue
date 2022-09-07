@@ -58,7 +58,7 @@
   >
     <el-table-column label="會員訊息">
       <el-table-column prop="account" sortable label="會員帳號"/>
-      <el-table-column prop="createTime" sortable label="註冊時間"/>
+      <el-table-column prop="createTime" sortable label="註冊時間" :formatter="timeFormat"/>
       <el-table-column prop="lowerAccount" sortable label="下家帳號"/>
     </el-table-column>
     <el-table-column label="分成訊息">
@@ -86,6 +86,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'profitSharingRecord',
   data() {
@@ -177,6 +179,9 @@ export default {
       }
 
       return 0;
+    },
+    timeFormat(row, column, cellValue) {
+      return moment(cellValue).format('lll');
     },
     resetForm() {
       this.searchInfo = {

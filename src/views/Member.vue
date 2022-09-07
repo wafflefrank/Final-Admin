@@ -27,7 +27,7 @@
   >
     <el-table-column label="會員訊息">
       <el-table-column prop="account" sortable label="會員帳號"/>
-      <el-table-column prop="Createtime" sortable label="註冊時間"/>
+      <el-table-column prop="Createtime" sortable label="註冊時間" :formatter="timeFormat"/>
     </el-table-column>
     <el-table-column label="錢包訊息">
       <el-table-column prop="btcAmount" sortable label="BTC" :formatter="stateFormat" />
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'Member',
   data() {
@@ -117,6 +119,9 @@ export default {
       }
 
       return 0;
+    },
+    timeFormat(row, column, cellValue) {
+      return moment(cellValue).format('lll');
     },
   },
   created() {
