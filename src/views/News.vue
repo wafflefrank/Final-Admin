@@ -1,42 +1,30 @@
 <template>
   <Loading :active="isLoading"></Loading>
-  <!-- 依搜尋客戶名稱 -->
   <el-row class="mb-2">
     <el-col :span="19" :offset="0"></el-col>
     <el-col :span="5" :offset="0" class="text-end">
-      <el-input
-        class="text-end"
-        v-model="search"
-        size="small"
-        placeholder="請輸入帳號名稱搜尋..."
-      />
+      <el-button size="small" type="success" @click="createNews()">新增</el-button>
     </el-col>
   </el-row>
-
   <!-- 資料表單 -->
   <el-table
-    :data="
-      tableData.filter(
-        (data) => !search || data.account.toLowerCase().includes(search.toLowerCase()),
-      )
-    "
+    :data="tableData"
     border
     stripe
     style="width: 100%"
     :header-cell-class-name="'member_title_dark'"
   >
-    <el-table-column label="會員訊息">
-      <el-table-column prop="account" sortable label="會員帳號"/>
-      <el-table-column prop="Createtime" sortable label="註冊時間" :formatter="timeFormat"/>
+    <el-table-column label="消息資訊">
+      <el-table-column prop="title" sortable label="標題"/>
+      <el-table-column prop="content" sortable label="內容"/>
+      <el-table-column prop="createTime" sortable label="創建時間" :formatter="timeFormat"/>
+      <el-table-column prop="updateTime" sortable label="修改時間" :formatter="timeFormat"/>
     </el-table-column>
-    <el-table-column label="錢包訊息">
-      <el-table-column prop="btcAmount" sortable label="BTC" :formatter="stateFormat" />
-      <el-table-column prop="ethAmount" sortable label="ETH" :formatter="stateFormat" />
-      <el-table-column prop="usdtAmount" sortable label="USDT" :formatter="stateFormat"/>
-    </el-table-column>
-    <el-table-column label="上級訊息">
-      <el-table-column prop="teacher_id" sortable label="上級ID"/>
-      <el-table-column prop="teacher_code" sortable label="上級邀請碼"/>
+    <el-table-column label="操作">
+      <template #default="scope">
+        <el-button size="small" type="primary" @click="editNews(scope.row)">修改</el-button>
+        <el-button size="small" type="warning" @click="deleteNews(scope.row)">刪除</el-button>
+      </template>
     </el-table-column>
   </el-table>
 
@@ -56,6 +44,31 @@
       style="margin: 10px 0px"
     ></el-pagination>
   </div>
+
+  <!-- 確認彈窗 -->
+  <el-dialog v-model="modalShow" :title="modalTitle" width="60%" center>
+    <div class="text-center justify-content-between pb-2">{{modalMessage}}</div>
+      <el-form>
+        <el-form-item label="標題">
+          <el-input
+            v-model="modalInfo.title"
+            placeholder="請輸入標題"
+          />
+        </el-form-item>
+        <el-form-item label="內容">
+          <el-input
+            v-model="modalInfo.content"
+            placeholder="請輸入內容"
+          />
+        </el-form-item>
+      </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="modalShow = false">取消</el-button>
+        <el-button type="primary" @click="updateNews()">確認</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -65,24 +78,31 @@ export default {
   name: 'News',
   data() {
     return {
+      rootApi: process.env.VUE_APP_TESTAPI,
+      modalShow: false,
+      modalType: 'create',
+      modalTitle: '新增消息',
+      modalId: 0,
       small: true, // 分頁樣式大小
       total: 0, // 總共多少頁數
       currentPage: 1, // 當前頁數
       pageSize: 10, // 當前頁顯示多少條
       pageSizeInfo: [10, 20, 30, 50],
-      search: '',
       tableData: [],
       pagination: [],
+      modalInfo: {
+        title: '',
+        content: '',
+      },
     };
   },
   components: {},
   methods: {
-    getUserInfo(limit = 10, skip = 0) {
-      const testapi = `${process.env.VUE_APP_TESTAPI}`;
+    getNewsInfo(limit = 10, skip = 0) {
       this.isLoading = true;
       this.$http
         .get(
-          `${testapi}/backend/members/members?skip=${skip}&limit=${limit}`,
+          `${this.rootApi}/backend/page/newsList?skip=${skip}&limit=${limit}`,
         )
         .then((res) => {
           this.isLoading = false;
@@ -97,16 +117,16 @@ export default {
       this.currentPage = skip; // 定義當前頁數 等於 skip
       if (skip <= 1) {
         // 若當前頁數 等於或小於1頁時
-        this.getUserInfo(this.pageSize);
+        this.getNewsInfo(this.pageSize);
       } else if (skip > 1) {
         // 若當前頁數等於2.3.4.5頁.....
-        this.getUserInfo(this.pageSize, this.pageSize * (skip - 1));
+        this.getNewsInfo(this.pageSize, this.pageSize * (skip - 1));
       }
     },
     // 變換每頁的項目數量
     sizeChange(limit) {
       this.pageSize = limit;
-      this.getUserInfo(limit);
+      this.getNewsInfo(limit);
       this.currentPage = 1;
     },
     // 千分位
@@ -121,11 +141,93 @@ export default {
       return 0;
     },
     timeFormat(row, column, cellValue) {
+      const formatDate = moment(cellValue).format('lll');
+
+      if (formatDate === 'Invalid date') {
+        return '';
+      }
       return moment(cellValue).format('lll');
+    },
+    createNews() {
+      this.modalShow = true;
+      this.modalType = 'create';
+      this.modalTitle = '新增消息';
+      this.modalInfo = {
+        title: '',
+        content: '',
+      };
+    },
+    editNews(data) {
+      this.modalShow = true;
+      this.modalType = 'edit';
+      this.modalId = data.id;
+      this.modalTitle = '編輯消息';
+      this.modalInfo = {
+        title: data.title,
+        content: data.content,
+      };
+    },
+    updateNews() {
+      this.isLoading = true;
+
+      if (this.modalType === 'create') {
+        this.$http
+          .post(
+            `${this.rootApi}/backend/page/newsAdd`, this.modalInfo,
+          )
+          .then((res) => {
+            this.modalShow = false;
+            this.isLoading = false;
+            if (res.data.code === 200) {
+              this.getNewsInfo();
+            }
+          });
+      } else {
+        const formatData = {
+          id: this.modalId,
+          ...this.modalInfo,
+        };
+
+        this.$http
+          .post(
+            `${this.rootApi}/backend/page/newsUpdate`, formatData,
+          )
+          .then((res) => {
+            this.modalShow = false;
+            this.isLoading = false;
+            if (res.data.code === 200) {
+              this.getNewsInfo();
+            }
+          });
+      }
+    },
+    deleteNews(data) {
+      this.$confirm('是否確定刪除此消息', '提示', {
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        const formatData = {
+          id: data.id,
+        };
+        this.isLoading = true;
+        this.$http
+          .post(
+            `${this.rootApi}/backend/page/newsDel`, formatData,
+          )
+          .then((res) => {
+            this.isLoading = false;
+            if (res.data.code === 200) {
+              this.getNewsInfo();
+            }
+          });
+      }).catch(() => {
+        console.log('取消刪除');
+      });
     },
   },
   created() {
-    this.getUserInfo();
+    this.getNewsInfo();
   },
 };
 </script>

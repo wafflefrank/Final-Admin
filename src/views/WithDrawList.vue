@@ -224,6 +224,11 @@ export default {
       return 0;
     },
     timeFormat(row, column, cellValue) {
+      const formatDate = moment(cellValue).format('lll');
+
+      if (formatDate === 'Invalid date') {
+        return '';
+      }
       return moment(cellValue).format('lll');
     },
     resetForm() {
