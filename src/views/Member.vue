@@ -72,7 +72,6 @@ export default {
       pageSizeInfo: [10, 20, 30, 50],
       search: '',
       tableData: [],
-      pagination: [],
     };
   },
   components: {},

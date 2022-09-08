@@ -89,7 +89,6 @@ export default {
       pageSize: 10, // 當前頁顯示多少條
       pageSizeInfo: [10, 20, 30, 50],
       tableData: [],
-      pagination: [],
       modalInfo: {
         title: '',
         content: '',

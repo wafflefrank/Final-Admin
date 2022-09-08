@@ -53,6 +53,16 @@ const routes = [
           module: '分成紀錄頁面',
         },
       },
+      // 質押列表
+      {
+        path: 'pledgelist',
+        name: '質押列表',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PledgeList.vue'),
+        meta: {
+          title: '質押列表頁面',
+          module: '質押列表頁面',
+        },
+      },
       // 最新消息
       {
         path: 'news',

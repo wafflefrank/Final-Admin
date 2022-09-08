@@ -30,6 +30,7 @@
           <el-menu-item index="1-2-1" @click="rechargeList()">充值列表</el-menu-item>
           <el-menu-item index="1-2-2" @click="withdrawDetail()">提領列表</el-menu-item>
           <el-menu-item index="1-2-3" @click="profitSharingRecord()">分成紀錄</el-menu-item>
+          <el-menu-item index="1-2-4" @click="pledgeList()">質押列表</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="1-3">
           <template #title>頁面管理</template>
@@ -142,6 +143,9 @@ export default defineComponent({
     // 2-3
     profitSharingRecord() {
       this.$router.push('/profitsharing');
+    },
+    pledgeList() {
+      this.$router.push('/pledgelist');
     },
     // 3-1
     news() {
