@@ -63,6 +63,16 @@ const routes = [
           module: '質押列表頁面',
         },
       },
+      // 質押列表設定
+      {
+        path: 'pledgelistsetting',
+        name: '質押列表設定',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PledgeListSetting.vue'),
+        meta: {
+          title: '質押列表設定頁面',
+          module: '質押列表設定頁面',
+        },
+      },
       // 最新消息
       {
         path: 'news',

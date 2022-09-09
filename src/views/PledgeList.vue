@@ -7,10 +7,10 @@
       <el-row>
         <!-- 左半邊 -->
         <el-col :span="12" class="add_left_style_1">
-          <el-form-item label="會員ID" class="updateTime_style me-2" prop="tagName">
+          <el-form-item label="會員帳號" class="updateTime_style me-2" prop="tagName">
             <el-input
-              v-model="searchInfo.id"
-              placeholder="請輸入ID"
+              v-model="searchInfo.account"
+              placeholder="請輸入帳號"
             />
           </el-form-item>
         </el-col>
@@ -43,7 +43,7 @@
     :header-cell-class-name="'member_title_dark'"
   >
     <el-table-column label="會員訊息">
-      <el-table-column prop="member_id" sortable label="會員ID"/>
+      <el-table-column prop="account" sortable label="會員帳號"/>
     </el-table-column>
     <el-table-column label="質押訊息">
       <el-table-column prop="order_no" sortable label="單號"/>
@@ -88,7 +88,7 @@
       :header-cell-class-name="'member_title_dark'"
     >
       <el-table-column label="會員訊息">
-        <el-table-column prop="member_id" sortable label="會員ID"/>
+        <el-table-column prop="member_id" sortable label="會員id"/>
       </el-table-column>
       <el-table-column label="質押訊息">
         <el-table-column prop="order_no" sortable label="單號"/>
@@ -138,7 +138,7 @@ export default {
       tableData: [],
       modalData: [],
       searchInfo: {
-        id: '',
+        account: '',
         number: '',
       },
     };
@@ -151,15 +151,15 @@ export default {
 
       if (searchType === 'search') {
         this.currentPage = 1;
-        if (this.searchInfo.id !== '') {
-          url += `&member_id=${this.searchInfo.id}`;
+        if (this.searchInfo.account !== '') {
+          url += `&account=${this.searchInfo.account}`;
         }
 
         if (this.searchInfo.number !== '') {
           url += `&order_no=${this.searchInfo.number}`;
         }
       }
-
+      console.log();
       this.$http
         .get(
           url,
@@ -167,6 +167,7 @@ export default {
         .then((res) => {
           this.isLoading = false;
           if (res.data.code === 200) {
+            console.log(res.data.data);
             this.tableData = res.data.data.list;
             this.total = res.data.data.total;
           }

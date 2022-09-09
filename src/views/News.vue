@@ -45,9 +45,8 @@
     ></el-pagination>
   </div>
 
-  <!-- 確認彈窗 -->
+  <!-- 修改彈窗 -->
   <el-dialog v-model="modalShow" :title="modalTitle" width="60%" center>
-    <div class="text-center justify-content-between pb-2">{{modalMessage}}</div>
       <el-form>
         <el-form-item label="標題">
           <el-input

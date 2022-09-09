@@ -33,8 +33,12 @@
           <el-menu-item index="1-2-4" @click="pledgeList()">質押列表</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="1-3">
+          <template #title>設定管理</template>
+          <el-menu-item index="1-3-1" @click="pledgeListsetting()">質押列表設定</el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="1-4">
           <template #title>頁面管理</template>
-          <el-menu-item index="1-3-1" @click="news()">最新消息</el-menu-item>
+          <el-menu-item index="1-4-1" @click="news()">最新消息</el-menu-item>
         </el-sub-menu>
       </el-menu-item-group>
     </el-sub-menu>
@@ -144,10 +148,15 @@ export default defineComponent({
     profitSharingRecord() {
       this.$router.push('/profitsharing');
     },
+    // 2-4
     pledgeList() {
       this.$router.push('/pledgelist');
     },
     // 3-1
+    pledgeListsetting() {
+      this.$router.push('/pledgelistsetting');
+    },
+    // 4-1
     news() {
       this.$router.push('/news');
     },
