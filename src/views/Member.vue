@@ -1,25 +1,33 @@
 <template>
   <Loading :active="isLoading"></Loading>
-  <!-- 依搜尋客戶名稱 -->
-  <el-row class="mb-2">
-    <el-col :span="19" :offset="0"></el-col>
-    <el-col :span="5" :offset="0" class="text-end">
-      <el-input
-        class="text-end"
-        v-model="search"
-        size="small"
-        placeholder="請輸入帳號名稱搜尋..."
-      />
-    </el-col>
-  </el-row>
+  <div class="mb-4 withdraw_content bg-purple-dark text-center">
+    <!-- 資料表單 -->
+    <el-form class="demo-ruleForm justify-content-between">
+      <!-- 第一列 -->
+      <el-row>
+        <!-- 左半邊 -->
+        <el-col :span="24" class="add_left_style_1">
+          <el-form-item label="會員帳號" class="updateTime_style me-2" prop="tagName">
+            <el-input
+              v-model="searchInfo.account"
+              placeholder="請輸入帳號"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div class="text-center justify-content-between mt-3">
+        <button type="button" class="btn btn-secondary" @click.prevent="resetForm()">重置</button>
+        <el-button class="editBtn ms-4" size="large" @click="getUserInfo(10, 0, 'search')">
+          <el-icon class="Search fs-4"> <Search></Search></el-icon>
+          搜尋
+        </el-button>
+      </div>
+    </el-form>
+  </div>
 
   <!-- 資料表單 -->
   <el-table
-    :data="
-      tableData.filter(
-        (data) => !search || data.account.toLowerCase().includes(search.toLowerCase()),
-      )
-    "
+    :data="tableData"
     border
     stripe
     style="width: 100%"
@@ -65,23 +73,34 @@ export default {
   name: 'Member',
   data() {
     return {
+      rootApi: process.env.VUE_APP_TESTAPI,
       small: true, // 分頁樣式大小
       total: 0, // 總共多少頁數
       currentPage: 1, // 當前頁數
       pageSize: 10, // 當前頁顯示多少條
       pageSizeInfo: [10, 20, 30, 50],
-      search: '',
+      searchInfo: {
+        account: '',
+      },
       tableData: [],
     };
   },
   components: {},
   methods: {
-    getUserInfo(limit = 10, skip = 0) {
-      const testapi = `${process.env.VUE_APP_TESTAPI}`;
+    getUserInfo(limit = 10, skip = 0, searchType = 'get') {
       this.isLoading = true;
+      let url = `${this.rootApi}/backend/members/members?skip=${skip}&limit=${limit}`;
+
+      if (searchType === 'search') {
+        this.currentPage = 1;
+        if (this.searchInfo.account !== '') {
+          url += `&account=${this.searchInfo.account}`;
+        }
+      }
+
       this.$http
         .get(
-          `${testapi}/backend/members/members?skip=${skip}&limit=${limit}`,
+          url,
         )
         .then((res) => {
           this.isLoading = false;
@@ -126,6 +145,13 @@ export default {
         return '';
       }
       return moment(cellValue).format('lll');
+    },
+    resetForm() {
+      this.searchInfo = {
+        account: '',
+      };
+
+      this.getUserInfo();
     },
   },
   created() {

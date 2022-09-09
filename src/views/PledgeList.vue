@@ -241,7 +241,6 @@ export default {
       this.searchInfo = {
         id: '',
         number: '',
-        interval: 'today',
       };
 
       this.getPledgeList();
