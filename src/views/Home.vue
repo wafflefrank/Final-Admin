@@ -1,27 +1,59 @@
-<!--
- * @Author: your name
- * @Date: 2021-01-18 15:46:34
- * @LastEditTime: 2021-11-30 18:54:36
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \vue3-element-admin\src\views\Home.vue
--->
 <template>
+  <Loading :active="isLoading"></Loading>
   <div class="ve_home">
     <el-row>
-      <el-col :span="16"><dashboard /></el-col>
+      <el-col :span="16"><Shortcuts :shortcutsInfo="shortcutsInfo"/></el-col>
       <el-col :span="8">
         <el-calendar class="ve_calendar"></el-calendar>
       </el-col>
     </el-row>
-    <live-chart />
+    <LiveChart :liveChartInfo="liveChartInfo"/>
   </div>
 </template>
 
-<script setup>
-import dashboard from '../components/Shortcuts.vue';
+<script>
+import Shortcuts from '../components/Shortcuts.vue';
 import LiveChart from '../components/LiveChart.vue';
-// import LiveChart from "@/components/dashboard/LiveChart";
+
+export default {
+  name: 'Home',
+  components: {
+    Shortcuts,
+    LiveChart,
+  },
+  data() {
+    return {
+      rootApi: process.env.VUE_APP_TESTAPI,
+      isLoading: false,
+      shortcutsInfo: {},
+      liveChartInfo: {},
+    };
+  },
+  methods: {
+    getHomeData() {
+      this.isLoading = true;
+      this.$http
+        .get(
+          `${this.rootApi}/backend/page/pageValue`,
+        )
+        .then((res) => {
+          this.isLoading = false;
+          if (res.data.code === 200) {
+            this.shortcutsInfo = res.data.data;
+            this.liveChartInfo = [
+              { value: 1, name: 'ETH' },
+              { value: 2, name: 'BTC' },
+              { value: 3, name: 'USDT' },
+            ];
+            // this.liveChartInfo = res.data.data.walletData.currency;
+          }
+        });
+    },
+  },
+  created() {
+    this.getHomeData();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

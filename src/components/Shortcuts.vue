@@ -6,8 +6,8 @@
           <football />
         </el-icon>
         <div>
-          <p>菜單數量</p>
-          <span>6</span>
+          <p>本日新增會員</p>
+          <span>{{shortcutsInfo.todayAddMembers}}</span>
         </div>
       </div>
     </el-col>
@@ -17,8 +17,8 @@
           <user />
         </el-icon>
         <div>
-          <p>用戶數量</p>
-          <span>6</span>
+          <p>本日質押</p>
+          <span>{{shortcutsInfo.todayPledge}}</span>
         </div>
       </div>
     </el-col>
@@ -30,8 +30,8 @@
           <cherry />
         </el-icon>
         <div>
-          <p>角色數量</p>
-          <span>6</span>
+          <p>本日存款</p>
+          <span>{{shortcutsInfo.todayDeposit}}</span>
         </div>
       </div>
     </el-col>
@@ -41,8 +41,8 @@
           <document />
         </el-icon>
         <div>
-          <p>資料數量</p>
-          <span>6</span>
+          <p>本日出款</p>
+          <span>{{shortcutsInfo.todayWithdraw}}</span>
         </div>
       </div>
     </el-col>
@@ -56,6 +56,7 @@ import {
 
 export default {
   name: 'Shortcuts',
+  props: ['shortcutsInfo'],
   data() {
     return {};
   },
@@ -101,7 +102,7 @@ export default {
       text-overflow: ellipsis;
     }
     span {
-      font-size: 60px;
+      font-size: 25px;
       font-weight: bold;
     }
   }
